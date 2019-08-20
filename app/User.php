@@ -30,4 +30,8 @@ class User extends Authenticatable
     public function books(){
         return $this->belongsToMany('App\Book');
     }
+
+    public function isAdmin(){
+        return $this->type === 0;
+    }
 }

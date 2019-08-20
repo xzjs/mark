@@ -6513,9 +6513,92 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
-    name: "User"
+    name: "User",
+    data: function data() {
+        return {
+            user: {
+                name: ""
+            },
+            users: [],
+            dialogVisible: false,
+            rule: {
+                name: [{ required: true, message: '请输入用户名', trigger: 'blur' }]
+            }
+        };
+    },
+
+    methods: {
+        handleClose: function handleClose(done) {
+            var _this = this;
+
+            this.$confirm('确认关闭？').then(function (_) {
+                _this.user = {};
+                done();
+            }).catch(function (_) {});
+        },
+        create: function create() {
+            var _this2 = this;
+
+            this.$refs['form'].validate(function (valid) {
+                if (valid) {
+                    axios.post('/users', _this2.user).then(function (response) {
+                        _this2.getUsers();
+                        _this2.$refs.form.resetFields();
+                        _this2.dialogVisible = false;
+                    }).catch(function (error) {
+                        var message = error.response.data.message;
+                        _this2.$message.error(message);
+                    });
+                } else {
+                    return false;
+                }
+            });
+        },
+        getUsers: function getUsers() {
+            var _this3 = this;
+
+            axios.get('/users').then(function (response) {
+                _this3.users = response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    },
+    mounted: function mounted() {
+        this.getUsers();
+    }
 };
 
 /***/ }),
@@ -14097,7 +14180,7 @@ window.Vue = __webpack_require__(3);
  */
 
 window.axios = __webpack_require__(117);
-
+window.axios.defaults.withCredentials = false;
 window.axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest'
 };
@@ -15085,7 +15168,7 @@ exports = module.exports = __webpack_require__(6)();
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -96933,7 +97016,123 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c(
+    "div",
+    [
+      _c(
+        "el-button",
+        {
+          attrs: { type: "primary", icon: "el-icon-edit" },
+          on: {
+            click: function($event) {
+              _vm.dialogVisible = true
+            }
+          }
+        },
+        [_vm._v("添加")]
+      ),
+      _vm._v(" "),
+      _c(
+        "el-table",
+        {
+          staticStyle: { width: "100%" },
+          attrs: { border: "", data: _vm.users }
+        },
+        [
+          _c("el-table-column", {
+            attrs: { prop: "name", label: "用户名", align: "center" }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-dialog",
+        {
+          attrs: {
+            title: "添加用户",
+            visible: _vm.dialogVisible,
+            width: "80%",
+            "before-close": _vm.handleClose
+          },
+          on: {
+            "update:visible": function($event) {
+              _vm.dialogVisible = $event
+            }
+          }
+        },
+        [
+          _c(
+            "el-form",
+            { ref: "form", attrs: { model: _vm.user, rules: _vm.rule } },
+            [
+              _c(
+                "el-form-item",
+                {
+                  attrs: {
+                    label: "用户名",
+                    "label-width": "100px",
+                    prop: "name"
+                  }
+                },
+                [
+                  _c("el-input", {
+                    attrs: { autocomplete: "off" },
+                    model: {
+                      value: _vm.user.name,
+                      callback: function($$v) {
+                        _vm.$set(_vm.user, "name", $$v)
+                      },
+                      expression: "user.name"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "密码", "label-width": "100px" } },
+                [_vm._v("\n                初始密码为111111\n            ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "dialog-footer",
+              attrs: { slot: "footer" },
+              slot: "footer"
+            },
+            [
+              _c(
+                "el-button",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.dialogVisible = false
+                    }
+                  }
+                },
+                [_vm._v("取 消")]
+              ),
+              _vm._v(" "),
+              _c(
+                "el-button",
+                { attrs: { type: "primary" }, on: { click: _vm.create } },
+                [_vm._v("确 定")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -22,5 +22,6 @@ Route::middleware(['auth'])->group(function () {
         'imgs' => 'ImgController',
         'documents' => 'DocumentController',
         'books' => 'BookController',
+        'users' => 'UserController',
     ]);
 });

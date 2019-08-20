@@ -26,7 +26,7 @@ window.Vue = require('vue');
  */
 
 window.axios = require('axios');
-
+window.axios.defaults.withCredentials = false;
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
 };
