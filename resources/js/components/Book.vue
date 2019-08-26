@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button type="primary" icon="el-icon-edit" @click="dialogVisible=true">添加</el-button>
+        <el-button v-if="user.type === 0" type="primary" icon="el-icon-edit" @click="dialogVisible=true">添加</el-button>
         <el-table
                 border
                 :data="books"
@@ -17,6 +17,16 @@
                     <a :href="scope.row.path" target="_blank">查看</a>
                 </template>
             </el-table-column>
+            <el-table-column
+                    v-if="user.type === 0"
+                    prop="users"
+                    label="分配用户">
+                <template slot-scope="scope">
+                    <li v-for="bookUser in scope.row.users">
+                        {{bookUser.name}}
+                    </li>
+                </template>
+            </el-table-column>
         </el-table>
         <el-dialog
                 title="添加图书"
@@ -29,9 +39,10 @@
                 </el-form-item>
                 <el-form-item label="图书上传" label-width="100px" prop="path">
                     <el-upload
+                            ref="upload"
                             class="upload-demo"
                             drag
-                            action="/imgs"
+                            action="/upload"
                             name="img"
                             accept=".pdf"
                             :on-success="uploadSuccess"
@@ -43,7 +54,6 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="create">确 定</el-button>
             </div>
         </el-dialog>
@@ -51,8 +61,13 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
+
     export default {
         name: "Book",
+        computed: {
+            ...mapState(['user'])
+        },
         data() {
             return {
                 book: {
@@ -76,6 +91,7 @@
                 this.$confirm('确认关闭？')
                     .then(_ => {
                         this.book = {};
+                        this.$refs.upload.clearFiles();
                         done();
                     })
                     .catch(_ => {
@@ -88,6 +104,7 @@
                             .then((response) => {
                                 this.getBooks();
                                 this.$refs.form.resetFields();
+                                this.$refs.upload.clearFiles();
                                 this.dialogVisible = false;
                             })
                     } else {

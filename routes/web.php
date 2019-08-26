@@ -19,7 +19,7 @@ Route::resource('tokens', 'TokenController');
 
 Route::middleware(['auth'])->group(function () {
     Route::resources([
-        'imgs' => 'ImgController',
+        'upload' => 'UploadController',
         'documents' => 'DocumentController',
         'books' => 'BookController',
         'users' => 'UserController',

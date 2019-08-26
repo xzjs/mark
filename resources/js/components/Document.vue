@@ -1,192 +1,205 @@
 <template>
-    <el-container>
-        <el-header>
-            <label class="name">{{name}}</label>
-        </el-header>
-        <el-main>
-            <el-button type="primary" icon="el-icon-edit" @click="dialogVisible=true">添加</el-button>
-            <el-table
-                    :data="cases"
-                    border
-                    style="width: 100%">
-                <el-table-column
-                        type="index"
-                        label="编号"
-                        width="50">
-                </el-table-column>
-                <el-table-column
-                        prop="title"
-                        label="标题"
-                        align="center"
-                        header-align="center">
-                </el-table-column>
-                <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="100">
-                    <template slot-scope="scope">
-                        <el-button type="text" size="small" @click="edit(scope.$index, scope.row)">编辑</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-dialog
-                    title="添加案例"
-                    :visible.sync="dialogVisible"
-                    width="80%"
-                    :before-close="handleClose">
-                <el-steps :active="active" finish-status="success">
-                    <el-step title="步骤 1"></el-step>
-                    <el-step title="步骤 2"></el-step>
-                    <el-step title="步骤 3"></el-step>
-                </el-steps>
-                <el-form :model="caseObj" :rules="rule0" ref="form0" label-width="100px" v-show="active===0">
-                    <el-form-item label="案例题目" prop="title">
-                        <el-input v-model="caseObj.title"></el-input>
-                    </el-form-item>
-                    <el-form-item label="案例介绍" prop="introduce">
-                        <el-input type="textarea" :rows="3" v-model="caseObj.introduce"></el-input>
-                    </el-form-item>
-                    <el-form-item label="案例图片" prop="img">
-                        <el-upload
-                                class="avatar-uploader"
-                                action="/imgs"
-                                :show-file-list="false"
-                                :on-success="handleAvatarSuccess"
-                                :before-upload="beforeAvatarUpload"
-                                name="img"
-                                :headers="{'X-XSRF-TOKEN':csrfToken}"
-                                accept=".jpg,.png">
-                            <img v-if="caseObj.img" :src="caseObj.img" class="avatar">
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
-                    </el-form-item>
-                    <el-form-item label="案例答案" prop="answer">
-                        <el-input v-model="caseObj.answer"></el-input>
-                    </el-form-item>
-                    <el-form-item label="案例提示" prop="tip">
-                        <el-input v-model="caseObj.tip"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button style="margin-top: 12px;" @click="next('form0')">下一步</el-button>
-                    </el-form-item>
-                </el-form>
-                <el-form :model="caseObj" :rules="rule1" ref="form1" label-width="100px" v-show="active===1">
-                    <el-form-item label="学科属性" prop="subject">
-                        <el-select v-model="caseObj.subject" placeholder="请选择">
-                            <el-option
-                                    v-for="item in subject"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="思维属性" prop="think">
-                        <el-select v-model="caseObj.think" placeholder="请选择">
-                            <el-option
-                                    v-for="item in think"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="思维难度" prop="think_difficulty">
-                        <el-select v-model="caseObj.think_difficulty" placeholder="请选择">
-                            <el-option
-                                    v-for="item in difficulty"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="能力属性" prop="ability">
-                        <el-select v-model="caseObj.ability" placeholder="请选择">
-                            <el-option
-                                    v-for="item in ability"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="能力难度" prop="ability_difficulty">
-                        <el-select v-model="caseObj.ability_difficulty" placeholder="请选择">
-                            <el-option
-                                    v-for="item in difficulty"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="知识属性" prop="knowledge">
-                        <el-select v-model="caseObj.knowledge" placeholder="请选择">
-                            <el-option
-                                    v-for="item in knowledge"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="知识难度" prop="knowledge_difficulty">
-                        <el-select v-model="caseObj.knowledge_difficulty" placeholder="请选择">
-                            <el-option
-                                    v-for="item in difficulty"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button style="margin-top: 12px;" @click="pre">上一步</el-button>
-                        <el-button style="margin-top: 12px;" @click="next('form1')">下一步</el-button>
-                    </el-form-item>
-                </el-form>
-                <el-form :model="caseObj" :rules="rule2" ref="form2" label-width="100px" v-show="active===2">
-                    <el-form-item label="地点" prop="place">
-                        <el-input v-model="caseObj.place"></el-input>
-                    </el-form-item>
-                    <el-form-item label="场景" prop="scene">
-                        <el-input v-model="caseObj.scene"></el-input>
-                    </el-form-item>
-                    <el-form-item label="人物" prop="character">
-                        <el-input v-model="caseObj.character"></el-input>
-                    </el-form-item>
-                    <el-form-item label="道具" prop="tool">
-                        <el-input v-model="caseObj.tool"></el-input>
-                    </el-form-item>
-                    <el-form-item label="问题承载" prop="problem">
-                        <el-select v-model="caseObj.problem" placeholder="请选择">
-                            <el-option
-                                    v-for="item in problem"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="收获习得" prop="result">
-                        <el-select v-model="caseObj.result" placeholder="请选择">
-                            <el-option
-                                    v-for="item in result"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button style="margin-top: 12px;" @click="pre">上一步</el-button>
-                        <el-button style="margin-top: 12px;" @click="next('form2')">提交</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-dialog>
-        </el-main>
-    </el-container>
+    <div>
+        <el-button type="primary" icon="el-icon-edit" @click="dialogVisible=true">添加</el-button>
+        <el-table
+                :data="cases"
+                border
+                style="width: 100%">
+            <el-table-column
+                    type="index"
+                    label="编号"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="title"
+                    label="标题"
+                    align="center"
+                    header-align="center">
+            </el-table-column>
+            <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="100">
+                <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="edit(scope.$index, scope.row)">编辑</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-dialog
+                title="添加案例"
+                :visible.sync="dialogVisible"
+                width="50%"
+                :before-close="handleClose">
+            <el-steps :active="active" finish-status="success">
+                <el-step title="步骤 1"></el-step>
+                <el-step title="步骤 2"></el-step>
+                <el-step title="步骤 3"></el-step>
+            </el-steps>
+            <el-form :model="caseObj" :rules="rule0" ref="form0" label-width="100px" v-show="active===0">
+                <el-form-item label="书名" prop="bookId">
+                    <el-select v-model="caseObj.bookId" placeholder="请选择">
+                        <el-option
+                                v-for="book in books"
+                                :key="book.id"
+                                :label="book.name"
+                                :value="book.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="页码" prop="pageNumber">
+                    <el-input v-model="caseObj.pageNumber" placeholder="请输入页码" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="案例图片" prop="img">
+                    <el-upload
+                            class="avatar-uploader"
+                            action="/upload"
+                            :show-file-list="false"
+                            :on-success="uploadOcr"
+                            name="img"
+                            :data="upload"
+                            :headers="{'X-XSRF-TOKEN':csrfToken}"
+                            accept=".jpg,.png,.bmp">
+                        <img v-if="caseObj.img" :src="caseObj.img" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="案例介绍" prop="introduce">
+                    <el-input type="textarea" :rows="3" v-model="caseObj.introduce"></el-input>
+                </el-form-item>
+                <el-form-item label="补充图片">
+                    <el-upload
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            list-type="picture-card"
+                    >
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="案例答案" prop="answer">
+                    <el-input v-model="caseObj.answer"></el-input>
+                </el-form-item>
+                <el-form-item label="案例提示" prop="tip">
+                    <el-input v-model="caseObj.tip"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button style="margin-top: 12px;" @click="next('form0')">下一步</el-button>
+                </el-form-item>
+            </el-form>
+            <el-form :model="caseObj" :rules="rule1" ref="form1" label-width="100px" v-show="active===1">
+                <el-form-item label="学科属性" prop="subject">
+                    <el-select v-model="caseObj.subject" placeholder="请选择">
+                        <el-option
+                                v-for="item in subject"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="思维属性" prop="think">
+                    <el-select v-model="caseObj.think" placeholder="请选择">
+                        <el-option
+                                v-for="item in think"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="思维难度" prop="think_difficulty">
+                    <el-select v-model="caseObj.think_difficulty" placeholder="请选择">
+                        <el-option
+                                v-for="item in difficulty"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="能力属性" prop="ability">
+                    <el-select v-model="caseObj.ability" placeholder="请选择">
+                        <el-option
+                                v-for="item in ability"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="能力难度" prop="ability_difficulty">
+                    <el-select v-model="caseObj.ability_difficulty" placeholder="请选择">
+                        <el-option
+                                v-for="item in difficulty"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="知识属性" prop="knowledge">
+                    <el-select v-model="caseObj.knowledge" placeholder="请选择">
+                        <el-option
+                                v-for="item in knowledge"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="知识难度" prop="knowledge_difficulty">
+                    <el-select v-model="caseObj.knowledge_difficulty" placeholder="请选择">
+                        <el-option
+                                v-for="item in difficulty"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-button style="margin-top: 12px;" @click="pre">上一步</el-button>
+                    <el-button style="margin-top: 12px;" @click="next('form1')">下一步</el-button>
+                </el-form-item>
+            </el-form>
+            <el-form :model="caseObj" :rules="rule2" ref="form2" label-width="100px" v-show="active===2">
+                <el-form-item label="地点" prop="place">
+                    <el-input v-model="caseObj.place"></el-input>
+                </el-form-item>
+                <el-form-item label="场景" prop="scene">
+                    <el-input v-model="caseObj.scene"></el-input>
+                </el-form-item>
+                <el-form-item label="人物" prop="character">
+                    <el-input v-model="caseObj.character"></el-input>
+                </el-form-item>
+                <el-form-item label="道具" prop="tool">
+                    <el-input v-model="caseObj.tool"></el-input>
+                </el-form-item>
+                <el-form-item label="问题承载" prop="problem">
+                    <el-select v-model="caseObj.problem" placeholder="请选择">
+                        <el-option
+                                v-for="item in problem"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="收获习得" prop="result">
+                    <el-select v-model="caseObj.result" placeholder="请选择">
+                        <el-option
+                                v-for="item in result"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-button style="margin-top: 12px;" @click="pre">上一步</el-button>
+                    <el-button style="margin-top: 12px;" @click="next('form2')">提交</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
@@ -201,6 +214,8 @@
             return {
                 cases: [],
                 caseObj: {
+                    bookId: '',
+                    pageNumber: 0,
                     title: '',
                     introduce: '',
                     img: '',
@@ -220,10 +235,13 @@
                     problem: '',
                     result: '',
                 },
+                books: [],
                 dialogVisible: false,
                 active: 0,
                 csrfToken: this.$cookies.get('XSRF-TOKEN'),
                 rule0: {
+                    bookId: [{required: true, message: '请选择书名', trigger: 'blur'}],
+                    pageNumber: [{required: true, message: '请输入页码', trigger: 'blur'}],
                     title: [{required: true, message: '请输入案例题目', trigger: 'blur'}],
                     introduce: [{required: true, message: '请输入案例介绍', trigger: 'blur'}],
                     img: [{required: true, message: '请上传案例图片', trigger: 'blur'}],
@@ -285,6 +303,9 @@
                     {value: 1, label: "综合问题解决"},
                     {value: 2, label: "工具使用技巧"},
                 ],
+                upload: {
+                    type: "ocr",
+                }
             }
         },
         methods: {
@@ -328,17 +349,9 @@
             handleAvatarSuccess(res, file) {
                 this.caseObj.img = res;
             },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
+            uploadOcr(res, file) {
+                this.caseObj.img = res.path;
+                this.caseObj.introduce = res.ocr;
             },
             getCases() {
                 axios.get('/documents')
@@ -359,9 +372,19 @@
                         console.log(error);
                     })
             },
+            getBooks() {
+                axios.get('/books')
+                    .then((response) => {
+                        this.books = response.data;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+            }
         },
         mounted() {
             this.getCases();
+            this.getBooks();
         }
     }
 </script>

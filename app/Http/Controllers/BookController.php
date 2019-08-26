@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,9 @@ class BookController extends Controller
         $user = Auth::user();
         switch ($user->type) {
             case 0:
-                $books = Book::all()->toArray();
+                $books = Book::with('users:name')
+                    ->get()
+                    ->toArray();
                 break;
             case 1:
                 $books = $user->books;
@@ -57,6 +60,15 @@ class BookController extends Controller
         $book->name = $request->name;
         $book->path = $request->path;
         $book->saveOrFail();
+        $users = User::select('id')
+            ->where('type', 1)
+            ->get()
+            ->toArray();
+        $userKeys = array_rand($users, 2);
+        foreach ($userKeys as $userKey) {
+            $userids[]=$users[$userKey]['id'];
+        }
+        $book->users()->attach($userids);
         return response()->json($book->id);
     }
 

@@ -1237,7 +1237,7 @@ var isInContainer = exports.isInContainer = function isInContainer(el, container
 /***/ (function(module, exports, __webpack_require__) {
 
 // Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(19)(function () {
+module.exports = !__webpack_require__(20)(function () {
   return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
 });
 
@@ -1698,63 +1698,6 @@ $exports.store = store;
 
 /***/ }),
 /* 17 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-var core = module.exports = { version: '2.6.9' };
-if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-module.exports = function (exec) {
-  try {
-    return !!exec();
-  } catch (e) {
-    return true;
-  }
-};
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-module.exports = function (it) {
-  return typeof it === 'object' ? it !== null : typeof it === 'function';
-};
-
-
-/***/ }),
-/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2777,7 +2720,64 @@ var index_esm = {
 /* harmony default export */ __webpack_exports__["default"] = (index_esm);
 
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(17)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(18)))
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.6.9' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+module.exports = function (exec) {
+  try {
+    return !!exec();
+  } catch (e) {
+    return true;
+  }
+};
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = function (it) {
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+
 
 /***/ }),
 /* 22 */
@@ -2810,7 +2810,7 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(20);
+var isObject = __webpack_require__(21);
 module.exports = function (it) {
   if (!isObject(it)) throw TypeError(it + ' is not an object!');
   return it;
@@ -3018,7 +3018,7 @@ module.exports = (
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(5);
-var core = __webpack_require__(18);
+var core = __webpack_require__(19);
 var ctx = __webpack_require__(146);
 var hide = __webpack_require__(13);
 var has = __webpack_require__(9);
@@ -3123,7 +3123,7 @@ module.exports = function (key) {
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var core = __webpack_require__(18);
+var core = __webpack_require__(19);
 var global = __webpack_require__(5);
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || (global[SHARED] = {});
@@ -3165,7 +3165,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = __webpack_require__(20);
+var isObject = __webpack_require__(21);
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
 // and the second argument - flag - preferred type is a string
 module.exports = function (it, S) {
@@ -3183,7 +3183,7 @@ module.exports = function (it, S) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(5);
-var core = __webpack_require__(18);
+var core = __webpack_require__(19);
 var LIBRARY = __webpack_require__(24);
 var wksExt = __webpack_require__(44);
 var defineProperty = __webpack_require__(14).f;
@@ -5858,7 +5858,7 @@ var _Main = __webpack_require__(217);
 
 var _Main2 = _interopRequireDefault(_Main);
 
-var _vuex = __webpack_require__(21);
+var _vuex = __webpack_require__(17);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5898,6 +5898,17 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5951,8 +5962,11 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 
+var _vuex = __webpack_require__(17);
+
 exports.default = {
     name: "Book",
+    computed: _extends({}, (0, _vuex.mapState)(['user'])),
     data: function data() {
         return {
             book: {
@@ -5978,6 +5992,7 @@ exports.default = {
 
             this.$confirm('确认关闭？').then(function (_) {
                 _this.book = {};
+                _this.$refs.upload.clearFiles();
                 done();
             }).catch(function (_) {});
         },
@@ -5989,6 +6004,7 @@ exports.default = {
                     axios.post('/books', _this2.book).then(function (response) {
                         _this2.getBooks();
                         _this2.$refs.form.resetFields();
+                        _this2.$refs.upload.clearFiles();
                         _this2.dialogVisible = false;
                     });
                 } else {
@@ -6213,8 +6229,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-var _vuex = __webpack_require__(21);
+var _vuex = __webpack_require__(17);
 
 exports.default = {
     name: "Document",
@@ -6223,6 +6252,8 @@ exports.default = {
         return {
             cases: [],
             caseObj: {
+                bookId: '',
+                pageNumber: 0,
                 title: '',
                 introduce: '',
                 img: '',
@@ -6242,10 +6273,13 @@ exports.default = {
                 problem: '',
                 result: ''
             },
+            books: [],
             dialogVisible: false,
             active: 0,
             csrfToken: this.$cookies.get('XSRF-TOKEN'),
             rule0: {
+                bookId: [{ required: true, message: '请选择书名', trigger: 'blur' }],
+                pageNumber: [{ required: true, message: '请输入页码', trigger: 'blur' }],
                 title: [{ required: true, message: '请输入案例题目', trigger: 'blur' }],
                 introduce: [{ required: true, message: '请输入案例介绍', trigger: 'blur' }],
                 img: [{ required: true, message: '请上传案例图片', trigger: 'blur' }],
@@ -6275,7 +6309,10 @@ exports.default = {
             knowledge: [{ value: 0, label: "数学推理" }, { value: 1, label: "空间想象" }],
             difficulty: [{ value: 0, label: "容易" }, { value: 1, label: "一般" }, { value: 2, label: "困难" }],
             problem: [{ value: 0, label: "拼图" }, { value: 1, label: "流程图" }, { value: 2, label: "运算" }, { value: 3, label: "代码逻辑" }, { value: 4, label: "观察" }, { value: 5, label: "编程环境" }],
-            result: [{ value: 0, label: "单一问题训练" }, { value: 1, label: "综合问题解决" }, { value: 2, label: "工具使用技巧" }]
+            result: [{ value: 0, label: "单一问题训练" }, { value: 1, label: "综合问题解决" }, { value: 2, label: "工具使用技巧" }],
+            upload: {
+                type: "ocr"
+            }
         };
     },
 
@@ -6319,17 +6356,9 @@ exports.default = {
         handleAvatarSuccess: function handleAvatarSuccess(res, file) {
             this.caseObj.img = res;
         },
-        beforeAvatarUpload: function beforeAvatarUpload(file) {
-            var isJPG = file.type === 'image/jpeg';
-            var isLt2M = file.size / 1024 / 1024 < 2;
-
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return isJPG && isLt2M;
+        uploadOcr: function uploadOcr(res, file) {
+            this.caseObj.img = res.path;
+            this.caseObj.introduce = res.ocr;
         },
         getCases: function getCases() {
             var _this3 = this;
@@ -6349,10 +6378,20 @@ exports.default = {
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+        getBooks: function getBooks() {
+            var _this5 = this;
+
+            axios.get('/books').then(function (response) {
+                _this5.books = response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
     },
     mounted: function mounted() {
         this.getCases();
+        this.getBooks();
     }
 };
 
@@ -6396,7 +6435,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 
-var _vuex = __webpack_require__(21);
+var _vuex = __webpack_require__(17);
 
 exports.default = {
     data: function data() {
@@ -6468,7 +6507,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 
-var _vuex = __webpack_require__(21);
+var _vuex = __webpack_require__(17);
 
 exports.default = {
     name: "Main",
@@ -6494,9 +6533,84 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
-    name: "Password"
+    name: "Password",
+    data: function data() {
+        var _this = this;
+
+        var validatePass = function validatePass(rule, value, callback) {
+            if (value === '') {
+                callback(new Error('请输入新密码'));
+            } else {
+                if (_this.ruleForm.repeatNewPwd !== '') {
+                    _this.$refs.ruleForm.validateField('repeatNewPwd');
+                }
+                callback();
+            }
+        };
+        var validatePass2 = function validatePass2(rule, value, callback) {
+            if (value === '') {
+                callback(new Error('请再次输入密码'));
+            } else if (value !== _this.ruleForm.newPwd) {
+                callback(new Error('两次输入密码不一致!'));
+            } else {
+                callback();
+            }
+        };
+        return {
+            ruleForm: {
+                oldPwd: '',
+                newPwd: '',
+                repeatOldPwd: ''
+            },
+            rules: {
+                oldPwd: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
+                newPwd: [{ validator: validatePass, trigger: 'blur' }],
+                repeatNewPwd: [{ validator: validatePass2, trigger: 'blur' }]
+            }
+        };
+    },
+
+    methods: {
+        submitForm: function submitForm(formName) {
+            var _this2 = this;
+
+            this.$refs[formName].validate(function (valid) {
+                if (valid) {
+                    axios.put('/users/0', _this2.ruleForm).then(function (response) {
+                        _this2.$message({
+                            message: '修改成功',
+                            'type': 'success'
+                        });
+                    }).catch(function (error) {
+                        console.log(error);
+                        _this2.$message.error(error.response.message);
+                    });
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        resetForm: function resetForm(formName) {
+            this.$refs[formName].resetFields();
+        }
+    }
 };
 
 /***/ }),
@@ -6645,7 +6759,7 @@ module.exports = function (it) {
 /* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(20);
+var isObject = __webpack_require__(21);
 var document = __webpack_require__(5).document;
 // typeof document.createElement is 'object' in old IE
 var is = isObject(document) && isObject(document.createElement);
@@ -6658,7 +6772,7 @@ module.exports = function (it) {
 /* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__(8) && !__webpack_require__(19)(function () {
+module.exports = !__webpack_require__(8) && !__webpack_require__(20)(function () {
   return Object.defineProperty(__webpack_require__(75)('div'), 'a', { get: function () { return 7; } }).a != 7;
 });
 
@@ -14250,7 +14364,7 @@ var _vue = __webpack_require__(3);
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _vuex = __webpack_require__(21);
+var _vuex = __webpack_require__(17);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
@@ -14301,7 +14415,7 @@ module.exports = { "default": __webpack_require__(142), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(162);
-module.exports = __webpack_require__(18).Object.assign;
+module.exports = __webpack_require__(19).Object.assign;
 
 
 /***/ }),
@@ -14312,7 +14426,7 @@ __webpack_require__(165);
 __webpack_require__(163);
 __webpack_require__(166);
 __webpack_require__(167);
-module.exports = __webpack_require__(18).Symbol;
+module.exports = __webpack_require__(19).Symbol;
 
 
 /***/ }),
@@ -14470,14 +14584,14 @@ module.exports = function (done, value) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var META = __webpack_require__(28)('meta');
-var isObject = __webpack_require__(20);
+var isObject = __webpack_require__(21);
 var has = __webpack_require__(9);
 var setDesc = __webpack_require__(14).f;
 var id = 0;
 var isExtensible = Object.isExtensible || function () {
   return true;
 };
-var FREEZE = !__webpack_require__(19)(function () {
+var FREEZE = !__webpack_require__(20)(function () {
   return isExtensible(Object.preventExtensions({}));
 });
 var setMeta = function (it) {
@@ -14540,7 +14654,7 @@ var IObject = __webpack_require__(77);
 var $assign = Object.assign;
 
 // should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || __webpack_require__(19)(function () {
+module.exports = !$assign || __webpack_require__(20)(function () {
   var A = {};
   var B = {};
   // eslint-disable-next-line no-undef
@@ -14796,7 +14910,7 @@ var DESCRIPTORS = __webpack_require__(8);
 var $export = __webpack_require__(34);
 var redefine = __webpack_require__(82);
 var META = __webpack_require__(152).KEY;
-var $fails = __webpack_require__(19);
+var $fails = __webpack_require__(20);
 var shared = __webpack_require__(39);
 var setToStringTag = __webpack_require__(37);
 var uid = __webpack_require__(28);
@@ -14806,7 +14920,7 @@ var wksDefine = __webpack_require__(43);
 var enumKeys = __webpack_require__(147);
 var isArray = __webpack_require__(149);
 var anObject = __webpack_require__(23);
-var isObject = __webpack_require__(20);
+var isObject = __webpack_require__(21);
 var toObject = __webpack_require__(41);
 var toIObject = __webpack_require__(15);
 var toPrimitive = __webpack_require__(42);
@@ -15098,7 +15212,7 @@ exports = module.exports = __webpack_require__(6)();
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -15112,7 +15226,7 @@ exports = module.exports = __webpack_require__(6)();
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -93293,7 +93407,7 @@ return jQuery;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17), __webpack_require__(236)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18), __webpack_require__(236)(module)))
 
 /***/ }),
 /* 201 */
@@ -94833,7 +94947,7 @@ var index = (function () {
 
 /* harmony default export */ __webpack_exports__["default"] = (index);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(17)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(18)))
 
 /***/ }),
 /* 207 */
@@ -95026,7 +95140,7 @@ var index = (function () {
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17), __webpack_require__(91)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18), __webpack_require__(91)))
 
 /***/ }),
 /* 208 */
@@ -95387,7 +95501,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ }),
 /* 212 */
@@ -95934,18 +96048,20 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "el-button",
-        {
-          attrs: { type: "primary", icon: "el-icon-edit" },
-          on: {
-            click: function($event) {
-              _vm.dialogVisible = true
-            }
-          }
-        },
-        [_vm._v("添加")]
-      ),
+      _vm.user.type === 0
+        ? _c(
+            "el-button",
+            {
+              attrs: { type: "primary", icon: "el-icon-edit" },
+              on: {
+                click: function($event) {
+                  _vm.dialogVisible = true
+                }
+              }
+            },
+            [_vm._v("添加")]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "el-table",
@@ -95974,7 +96090,34 @@ var render = function() {
                 }
               }
             ])
-          })
+          }),
+          _vm._v(" "),
+          _vm.user.type === 0
+            ? _c("el-table-column", {
+                attrs: { prop: "users", label: "分配用户" },
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "default",
+                      fn: function(scope) {
+                        return _vm._l(scope.row.users, function(bookUser) {
+                          return _c("li", [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(bookUser.name) +
+                                "\n                "
+                            )
+                          ])
+                        })
+                      }
+                    }
+                  ],
+                  null,
+                  false,
+                  1013391506
+                )
+              })
+            : _vm._e()
         ],
         1
       ),
@@ -96036,10 +96179,11 @@ var render = function() {
                   _c(
                     "el-upload",
                     {
+                      ref: "upload",
                       staticClass: "upload-demo",
                       attrs: {
                         drag: "",
-                        action: "/imgs",
+                        action: "/upload",
                         name: "img",
                         accept: ".pdf",
                         "on-success": _vm.uploadSuccess,
@@ -96082,18 +96226,6 @@ var render = function() {
             [
               _c(
                 "el-button",
-                {
-                  on: {
-                    click: function($event) {
-                      _vm.dialogVisible = false
-                    }
-                  }
-                },
-                [_vm._v("取 消")]
-              ),
-              _vm._v(" "),
-              _c(
-                "el-button",
                 { attrs: { type: "primary" }, on: { click: _vm.create } },
                 [_vm._v("确 定")]
               )
@@ -96127,7 +96259,106 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c(
+    "el-form",
+    {
+      ref: "ruleForm",
+      staticClass: "demo-ruleForm",
+      attrs: {
+        model: _vm.ruleForm,
+        "status-icon": "",
+        rules: _vm.rules,
+        "label-width": "100px"
+      }
+    },
+    [
+      _c(
+        "el-form-item",
+        { attrs: { label: "原密码", prop: "oldPwd" } },
+        [
+          _c("el-input", {
+            attrs: { type: "password", autocomplete: "off" },
+            model: {
+              value: _vm.ruleForm.oldPwd,
+              callback: function($$v) {
+                _vm.$set(_vm.ruleForm, "oldPwd", $$v)
+              },
+              expression: "ruleForm.oldPwd"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-form-item",
+        { attrs: { label: "新密码", prop: "newPwd" } },
+        [
+          _c("el-input", {
+            attrs: { type: "password", autocomplete: "off" },
+            model: {
+              value: _vm.ruleForm.newPwd,
+              callback: function($$v) {
+                _vm.$set(_vm.ruleForm, "newPwd", $$v)
+              },
+              expression: "ruleForm.newPwd"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-form-item",
+        { attrs: { label: "确认新密码", prop: "repeatNewPwd" } },
+        [
+          _c("el-input", {
+            attrs: { type: "password", autocomplete: "off" },
+            model: {
+              value: _vm.ruleForm.repeatNewPwd,
+              callback: function($$v) {
+                _vm.$set(_vm.ruleForm, "repeatNewPwd", $$v)
+              },
+              expression: "ruleForm.repeatNewPwd"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-form-item",
+        [
+          _c(
+            "el-button",
+            {
+              attrs: { type: "primary" },
+              on: {
+                click: function($event) {
+                  return _vm.submitForm("ruleForm")
+                }
+              }
+            },
+            [_vm._v("提交")]
+          ),
+          _vm._v(" "),
+          _c(
+            "el-button",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.resetForm("ruleForm")
+                }
+              }
+            },
+            [_vm._v("重置")]
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -96250,242 +96481,139 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "el-container",
+    "div",
     [
-      _c("el-header", [
-        _c("label", { staticClass: "name" }, [_vm._v(_vm._s(_vm.name))])
-      ]),
+      _c(
+        "el-button",
+        {
+          attrs: { type: "primary", icon: "el-icon-edit" },
+          on: {
+            click: function($event) {
+              _vm.dialogVisible = true
+            }
+          }
+        },
+        [_vm._v("添加")]
+      ),
       _vm._v(" "),
       _c(
-        "el-main",
+        "el-table",
+        {
+          staticStyle: { width: "100%" },
+          attrs: { data: _vm.cases, border: "" }
+        },
         [
-          _c(
-            "el-button",
-            {
-              attrs: { type: "primary", icon: "el-icon-edit" },
-              on: {
-                click: function($event) {
-                  _vm.dialogVisible = true
+          _c("el-table-column", {
+            attrs: { type: "index", label: "编号", width: "50" }
+          }),
+          _vm._v(" "),
+          _c("el-table-column", {
+            attrs: {
+              prop: "title",
+              label: "标题",
+              align: "center",
+              "header-align": "center"
+            }
+          }),
+          _vm._v(" "),
+          _c("el-table-column", {
+            attrs: { fixed: "right", label: "操作", width: "100" },
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(scope) {
+                  return [
+                    _c(
+                      "el-button",
+                      {
+                        attrs: { type: "text", size: "small" },
+                        on: {
+                          click: function($event) {
+                            return _vm.edit(scope.$index, scope.row)
+                          }
+                        }
+                      },
+                      [_vm._v("编辑")]
+                    )
+                  ]
                 }
               }
-            },
-            [_vm._v("添加")]
-          ),
-          _vm._v(" "),
+            ])
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-dialog",
+        {
+          attrs: {
+            title: "添加案例",
+            visible: _vm.dialogVisible,
+            width: "50%",
+            "before-close": _vm.handleClose
+          },
+          on: {
+            "update:visible": function($event) {
+              _vm.dialogVisible = $event
+            }
+          }
+        },
+        [
           _c(
-            "el-table",
-            {
-              staticStyle: { width: "100%" },
-              attrs: { data: _vm.cases, border: "" }
-            },
+            "el-steps",
+            { attrs: { active: _vm.active, "finish-status": "success" } },
             [
-              _c("el-table-column", {
-                attrs: { type: "index", label: "编号", width: "50" }
-              }),
+              _c("el-step", { attrs: { title: "步骤 1" } }),
               _vm._v(" "),
-              _c("el-table-column", {
-                attrs: {
-                  prop: "title",
-                  label: "标题",
-                  align: "center",
-                  "header-align": "center"
-                }
-              }),
+              _c("el-step", { attrs: { title: "步骤 2" } }),
               _vm._v(" "),
-              _c("el-table-column", {
-                attrs: { fixed: "right", label: "操作", width: "100" },
-                scopedSlots: _vm._u([
-                  {
-                    key: "default",
-                    fn: function(scope) {
-                      return [
-                        _c(
-                          "el-button",
-                          {
-                            attrs: { type: "text", size: "small" },
-                            on: {
-                              click: function($event) {
-                                return _vm.edit(scope.$index, scope.row)
-                              }
-                            }
-                          },
-                          [_vm._v("编辑")]
-                        )
-                      ]
-                    }
-                  }
-                ])
-              })
+              _c("el-step", { attrs: { title: "步骤 3" } })
             ],
             1
           ),
           _vm._v(" "),
           _c(
-            "el-dialog",
+            "el-form",
             {
-              attrs: {
-                title: "添加案例",
-                visible: _vm.dialogVisible,
-                width: "80%",
-                "before-close": _vm.handleClose
-              },
-              on: {
-                "update:visible": function($event) {
-                  _vm.dialogVisible = $event
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.active === 0,
+                  expression: "active===0"
                 }
+              ],
+              ref: "form0",
+              attrs: {
+                model: _vm.caseObj,
+                rules: _vm.rule0,
+                "label-width": "100px"
               }
             },
             [
               _c(
-                "el-steps",
-                { attrs: { active: _vm.active, "finish-status": "success" } },
+                "el-form-item",
+                { attrs: { label: "书名", prop: "bookId" } },
                 [
-                  _c("el-step", { attrs: { title: "步骤 1" } }),
-                  _vm._v(" "),
-                  _c("el-step", { attrs: { title: "步骤 2" } }),
-                  _vm._v(" "),
-                  _c("el-step", { attrs: { title: "步骤 3" } })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "el-form",
-                {
-                  directives: [
+                  _c(
+                    "el-select",
                     {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.active === 0,
-                      expression: "active===0"
-                    }
-                  ],
-                  ref: "form0",
-                  attrs: {
-                    model: _vm.caseObj,
-                    rules: _vm.rule0,
-                    "label-width": "100px"
-                  }
-                },
-                [
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "案例题目", prop: "title" } },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.caseObj.title,
-                          callback: function($$v) {
-                            _vm.$set(_vm.caseObj, "title", $$v)
-                          },
-                          expression: "caseObj.title"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "案例介绍", prop: "introduce" } },
-                    [
-                      _c("el-input", {
-                        attrs: { type: "textarea", rows: 3 },
-                        model: {
-                          value: _vm.caseObj.introduce,
-                          callback: function($$v) {
-                            _vm.$set(_vm.caseObj, "introduce", $$v)
-                          },
-                          expression: "caseObj.introduce"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "案例图片", prop: "img" } },
-                    [
-                      _c(
-                        "el-upload",
-                        {
-                          staticClass: "avatar-uploader",
-                          attrs: {
-                            action: "/imgs",
-                            "show-file-list": false,
-                            "on-success": _vm.handleAvatarSuccess,
-                            "before-upload": _vm.beforeAvatarUpload,
-                            name: "img",
-                            headers: { "X-XSRF-TOKEN": _vm.csrfToken },
-                            accept: ".jpg,.png"
-                          }
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.bookId,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "bookId", $$v)
                         },
-                        [
-                          _vm.caseObj.img
-                            ? _c("img", {
-                                staticClass: "avatar",
-                                attrs: { src: _vm.caseObj.img }
-                              })
-                            : _c("i", {
-                                staticClass: "el-icon-plus avatar-uploader-icon"
-                              })
-                        ]
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "案例答案", prop: "answer" } },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.caseObj.answer,
-                          callback: function($$v) {
-                            _vm.$set(_vm.caseObj, "answer", $$v)
-                          },
-                          expression: "caseObj.answer"
-                        }
+                        expression: "caseObj.bookId"
+                      }
+                    },
+                    _vm._l(_vm.books, function(book) {
+                      return _c("el-option", {
+                        key: book.id,
+                        attrs: { label: book.name, value: book.id }
                       })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "案例提示", prop: "tip" } },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.caseObj.tip,
-                          callback: function($$v) {
-                            _vm.$set(_vm.caseObj, "tip", $$v)
-                          },
-                          expression: "caseObj.tip"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    [
-                      _c(
-                        "el-button",
-                        {
-                          staticStyle: { "margin-top": "12px" },
-                          on: {
-                            click: function($event) {
-                              return _vm.next("form0")
-                            }
-                          }
-                        },
-                        [_vm._v("下一步")]
-                      )
-                    ],
+                    }),
                     1
                   )
                 ],
@@ -96493,249 +96621,189 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "el-form",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.active === 1,
-                      expression: "active===1"
+                "el-form-item",
+                { attrs: { label: "页码", prop: "pageNumber" } },
+                [
+                  _c("el-input", {
+                    attrs: { placeholder: "请输入页码", type: "number" },
+                    model: {
+                      value: _vm.caseObj.pageNumber,
+                      callback: function($$v) {
+                        _vm.$set(_vm.caseObj, "pageNumber", $$v)
+                      },
+                      expression: "caseObj.pageNumber"
                     }
-                  ],
-                  ref: "form1",
-                  attrs: {
-                    model: _vm.caseObj,
-                    rules: _vm.rule1,
-                    "label-width": "100px"
-                  }
-                },
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "案例图片", prop: "img" } },
                 [
                   _c(
-                    "el-form-item",
-                    { attrs: { label: "学科属性", prop: "subject" } },
-                    [
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { placeholder: "请选择" },
-                          model: {
-                            value: _vm.caseObj.subject,
-                            callback: function($$v) {
-                              _vm.$set(_vm.caseObj, "subject", $$v)
-                            },
-                            expression: "caseObj.subject"
-                          }
-                        },
-                        _vm._l(_vm.subject, function(item) {
-                          return _c("el-option", {
-                            key: item.value,
-                            attrs: { label: item.label, value: item.value }
-                          })
-                        }),
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "思维属性", prop: "think" } },
-                    [
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { placeholder: "请选择" },
-                          model: {
-                            value: _vm.caseObj.think,
-                            callback: function($$v) {
-                              _vm.$set(_vm.caseObj, "think", $$v)
-                            },
-                            expression: "caseObj.think"
-                          }
-                        },
-                        _vm._l(_vm.think, function(item) {
-                          return _c("el-option", {
-                            key: item.value,
-                            attrs: { label: item.label, value: item.value }
-                          })
-                        }),
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "思维难度", prop: "think_difficulty" } },
-                    [
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { placeholder: "请选择" },
-                          model: {
-                            value: _vm.caseObj.think_difficulty,
-                            callback: function($$v) {
-                              _vm.$set(_vm.caseObj, "think_difficulty", $$v)
-                            },
-                            expression: "caseObj.think_difficulty"
-                          }
-                        },
-                        _vm._l(_vm.difficulty, function(item) {
-                          return _c("el-option", {
-                            key: item.value,
-                            attrs: { label: item.label, value: item.value }
-                          })
-                        }),
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "能力属性", prop: "ability" } },
-                    [
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { placeholder: "请选择" },
-                          model: {
-                            value: _vm.caseObj.ability,
-                            callback: function($$v) {
-                              _vm.$set(_vm.caseObj, "ability", $$v)
-                            },
-                            expression: "caseObj.ability"
-                          }
-                        },
-                        _vm._l(_vm.ability, function(item) {
-                          return _c("el-option", {
-                            key: item.value,
-                            attrs: { label: item.label, value: item.value }
-                          })
-                        }),
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
+                    "el-upload",
                     {
-                      attrs: { label: "能力难度", prop: "ability_difficulty" }
+                      staticClass: "avatar-uploader",
+                      attrs: {
+                        action: "/upload",
+                        "show-file-list": false,
+                        "on-success": _vm.uploadOcr,
+                        name: "img",
+                        data: _vm.upload,
+                        headers: { "X-XSRF-TOKEN": _vm.csrfToken },
+                        accept: ".jpg,.png,.bmp"
+                      }
                     },
                     [
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { placeholder: "请选择" },
-                          model: {
-                            value: _vm.caseObj.ability_difficulty,
-                            callback: function($$v) {
-                              _vm.$set(_vm.caseObj, "ability_difficulty", $$v)
-                            },
-                            expression: "caseObj.ability_difficulty"
-                          }
-                        },
-                        _vm._l(_vm.difficulty, function(item) {
-                          return _c("el-option", {
-                            key: item.value,
-                            attrs: { label: item.label, value: item.value }
+                      _vm.caseObj.img
+                        ? _c("img", {
+                            staticClass: "avatar",
+                            attrs: { src: _vm.caseObj.img }
                           })
-                        }),
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "知识属性", prop: "knowledge" } },
-                    [
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { placeholder: "请选择" },
-                          model: {
-                            value: _vm.caseObj.knowledge,
-                            callback: function($$v) {
-                              _vm.$set(_vm.caseObj, "knowledge", $$v)
-                            },
-                            expression: "caseObj.knowledge"
-                          }
-                        },
-                        _vm._l(_vm.knowledge, function(item) {
-                          return _c("el-option", {
-                            key: item.value,
-                            attrs: { label: item.label, value: item.value }
+                        : _c("i", {
+                            staticClass: "el-icon-plus avatar-uploader-icon"
                           })
-                        }),
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
+                    ]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "案例介绍", prop: "introduce" } },
+                [
+                  _c("el-input", {
+                    attrs: { type: "textarea", rows: 3 },
+                    model: {
+                      value: _vm.caseObj.introduce,
+                      callback: function($$v) {
+                        _vm.$set(_vm.caseObj, "introduce", $$v)
+                      },
+                      expression: "caseObj.introduce"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "补充图片" } },
+                [
                   _c(
-                    "el-form-item",
+                    "el-upload",
                     {
-                      attrs: { label: "知识难度", prop: "knowledge_difficulty" }
+                      attrs: {
+                        action: "https://jsonplaceholder.typicode.com/posts/",
+                        "list-type": "picture-card"
+                      }
                     },
-                    [
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { placeholder: "请选择" },
-                          model: {
-                            value: _vm.caseObj.knowledge_difficulty,
-                            callback: function($$v) {
-                              _vm.$set(_vm.caseObj, "knowledge_difficulty", $$v)
-                            },
-                            expression: "caseObj.knowledge_difficulty"
-                          }
-                        },
-                        _vm._l(_vm.difficulty, function(item) {
-                          return _c("el-option", {
-                            key: item.value,
-                            attrs: { label: item.label, value: item.value }
-                          })
-                        }),
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
+                    [_c("i", { staticClass: "el-icon-plus" })]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "案例答案", prop: "answer" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.caseObj.answer,
+                      callback: function($$v) {
+                        _vm.$set(_vm.caseObj, "answer", $$v)
+                      },
+                      expression: "caseObj.answer"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "案例提示", prop: "tip" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.caseObj.tip,
+                      callback: function($$v) {
+                        _vm.$set(_vm.caseObj, "tip", $$v)
+                      },
+                      expression: "caseObj.tip"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                [
                   _c(
-                    "el-form-item",
-                    [
-                      _c(
-                        "el-button",
-                        {
-                          staticStyle: { "margin-top": "12px" },
-                          on: { click: _vm.pre }
+                    "el-button",
+                    {
+                      staticStyle: { "margin-top": "12px" },
+                      on: {
+                        click: function($event) {
+                          return _vm.next("form0")
+                        }
+                      }
+                    },
+                    [_vm._v("下一步")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "el-form",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.active === 1,
+                  expression: "active===1"
+                }
+              ],
+              ref: "form1",
+              attrs: {
+                model: _vm.caseObj,
+                rules: _vm.rule1,
+                "label-width": "100px"
+              }
+            },
+            [
+              _c(
+                "el-form-item",
+                { attrs: { label: "学科属性", prop: "subject" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.subject,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "subject", $$v)
                         },
-                        [_vm._v("上一步")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "el-button",
-                        {
-                          staticStyle: { "margin-top": "12px" },
-                          on: {
-                            click: function($event) {
-                              return _vm.next("form1")
-                            }
-                          }
-                        },
-                        [_vm._v("下一步")]
-                      )
-                    ],
+                        expression: "caseObj.subject"
+                      }
+                    },
+                    _vm._l(_vm.subject, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
                     1
                   )
                 ],
@@ -96743,174 +96811,370 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "el-form",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.active === 2,
-                      expression: "active===2"
-                    }
-                  ],
-                  ref: "form2",
-                  attrs: {
-                    model: _vm.caseObj,
-                    rules: _vm.rule2,
-                    "label-width": "100px"
-                  }
-                },
+                "el-form-item",
+                { attrs: { label: "思维属性", prop: "think" } },
                 [
                   _c(
-                    "el-form-item",
-                    { attrs: { label: "地点", prop: "place" } },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.caseObj.place,
-                          callback: function($$v) {
-                            _vm.$set(_vm.caseObj, "place", $$v)
-                          },
-                          expression: "caseObj.place"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "场景", prop: "scene" } },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.caseObj.scene,
-                          callback: function($$v) {
-                            _vm.$set(_vm.caseObj, "scene", $$v)
-                          },
-                          expression: "caseObj.scene"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "人物", prop: "character" } },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.caseObj.character,
-                          callback: function($$v) {
-                            _vm.$set(_vm.caseObj, "character", $$v)
-                          },
-                          expression: "caseObj.character"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "道具", prop: "tool" } },
-                    [
-                      _c("el-input", {
-                        model: {
-                          value: _vm.caseObj.tool,
-                          callback: function($$v) {
-                            _vm.$set(_vm.caseObj, "tool", $$v)
-                          },
-                          expression: "caseObj.tool"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-form-item",
-                    { attrs: { label: "问题承载", prop: "problem" } },
-                    [
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { placeholder: "请选择" },
-                          model: {
-                            value: _vm.caseObj.problem,
-                            callback: function($$v) {
-                              _vm.$set(_vm.caseObj, "problem", $$v)
-                            },
-                            expression: "caseObj.problem"
-                          }
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.think,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "think", $$v)
                         },
-                        _vm._l(_vm.problem, function(item) {
-                          return _c("el-option", {
-                            key: item.value,
-                            attrs: { label: item.label, value: item.value }
-                          })
-                        }),
-                        1
-                      )
-                    ],
+                        expression: "caseObj.think"
+                      }
+                    },
+                    _vm._l(_vm.think, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
                     1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "思维难度", prop: "think_difficulty" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.think_difficulty,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "think_difficulty", $$v)
+                        },
+                        expression: "caseObj.think_difficulty"
+                      }
+                    },
+                    _vm._l(_vm.difficulty, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "能力属性", prop: "ability" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.ability,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "ability", $$v)
+                        },
+                        expression: "caseObj.ability"
+                      }
+                    },
+                    _vm._l(_vm.ability, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "能力难度", prop: "ability_difficulty" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.ability_difficulty,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "ability_difficulty", $$v)
+                        },
+                        expression: "caseObj.ability_difficulty"
+                      }
+                    },
+                    _vm._l(_vm.difficulty, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "知识属性", prop: "knowledge" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.knowledge,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "knowledge", $$v)
+                        },
+                        expression: "caseObj.knowledge"
+                      }
+                    },
+                    _vm._l(_vm.knowledge, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "知识难度", prop: "knowledge_difficulty" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.knowledge_difficulty,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "knowledge_difficulty", $$v)
+                        },
+                        expression: "caseObj.knowledge_difficulty"
+                      }
+                    },
+                    _vm._l(_vm.difficulty, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                [
+                  _c(
+                    "el-button",
+                    {
+                      staticStyle: { "margin-top": "12px" },
+                      on: { click: _vm.pre }
+                    },
+                    [_vm._v("上一步")]
                   ),
                   _vm._v(" "),
                   _c(
-                    "el-form-item",
-                    { attrs: { label: "收获习得", prop: "result" } },
-                    [
-                      _c(
-                        "el-select",
-                        {
-                          attrs: { placeholder: "请选择" },
-                          model: {
-                            value: _vm.caseObj.result,
-                            callback: function($$v) {
-                              _vm.$set(_vm.caseObj, "result", $$v)
-                            },
-                            expression: "caseObj.result"
-                          }
+                    "el-button",
+                    {
+                      staticStyle: { "margin-top": "12px" },
+                      on: {
+                        click: function($event) {
+                          return _vm.next("form1")
+                        }
+                      }
+                    },
+                    [_vm._v("下一步")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "el-form",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.active === 2,
+                  expression: "active===2"
+                }
+              ],
+              ref: "form2",
+              attrs: {
+                model: _vm.caseObj,
+                rules: _vm.rule2,
+                "label-width": "100px"
+              }
+            },
+            [
+              _c(
+                "el-form-item",
+                { attrs: { label: "地点", prop: "place" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.caseObj.place,
+                      callback: function($$v) {
+                        _vm.$set(_vm.caseObj, "place", $$v)
+                      },
+                      expression: "caseObj.place"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "场景", prop: "scene" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.caseObj.scene,
+                      callback: function($$v) {
+                        _vm.$set(_vm.caseObj, "scene", $$v)
+                      },
+                      expression: "caseObj.scene"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "人物", prop: "character" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.caseObj.character,
+                      callback: function($$v) {
+                        _vm.$set(_vm.caseObj, "character", $$v)
+                      },
+                      expression: "caseObj.character"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "道具", prop: "tool" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.caseObj.tool,
+                      callback: function($$v) {
+                        _vm.$set(_vm.caseObj, "tool", $$v)
+                      },
+                      expression: "caseObj.tool"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "问题承载", prop: "problem" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.problem,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "problem", $$v)
                         },
-                        _vm._l(_vm.result, function(item) {
-                          return _c("el-option", {
-                            key: item.value,
-                            attrs: { label: item.label, value: item.value }
-                          })
-                        }),
-                        1
-                      )
-                    ],
+                        expression: "caseObj.problem"
+                      }
+                    },
+                    _vm._l(_vm.problem, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
                     1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "收获习得", prop: "result" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.caseObj.result,
+                        callback: function($$v) {
+                          _vm.$set(_vm.caseObj, "result", $$v)
+                        },
+                        expression: "caseObj.result"
+                      }
+                    },
+                    _vm._l(_vm.result, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                [
+                  _c(
+                    "el-button",
+                    {
+                      staticStyle: { "margin-top": "12px" },
+                      on: { click: _vm.pre }
+                    },
+                    [_vm._v("上一步")]
                   ),
                   _vm._v(" "),
                   _c(
-                    "el-form-item",
-                    [
-                      _c(
-                        "el-button",
-                        {
-                          staticStyle: { "margin-top": "12px" },
-                          on: { click: _vm.pre }
-                        },
-                        [_vm._v("上一步")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "el-button",
-                        {
-                          staticStyle: { "margin-top": "12px" },
-                          on: {
-                            click: function($event) {
-                              return _vm.next("form2")
-                            }
-                          }
-                        },
-                        [_vm._v("提交")]
-                      )
-                    ],
-                    1
+                    "el-button",
+                    {
+                      staticStyle: { "margin-top": "12px" },
+                      on: {
+                        click: function($event) {
+                          return _vm.next("form2")
+                        }
+                      }
+                    },
+                    [_vm._v("提交")]
                   )
                 ],
                 1
@@ -109331,7 +109595,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17), __webpack_require__(211).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18), __webpack_require__(211).setImmediate))
 
 /***/ }),
 /* 236 */
