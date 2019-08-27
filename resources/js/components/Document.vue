@@ -68,11 +68,15 @@
                 </el-form-item>
                 <el-form-item label="补充图片">
                     <el-upload
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            action="/upload"
                             list-type="picture-card"
-                    >
+                            :on-success="uploadSupplementSuccess"
+                            :on-remove="removeSupplement">
                         <i class="el-icon-plus"></i>
                     </el-upload>
+                    <el-dialog :visible.sync="dialogVisible">
+                        <img width="100%" :src="dialogImageUrl" alt="">
+                    </el-dialog>
                 </el-form-item>
                 <el-form-item label="案例答案" prop="answer">
                     <el-input v-model="caseObj.answer"></el-input>
@@ -216,9 +220,9 @@
                 caseObj: {
                     bookId: '',
                     pageNumber: 0,
-                    title: '',
-                    introduce: '',
                     img: '',
+                    introduce: '',
+                    imgSupplement: [],
                     answer: '',
                     tip: '',
                     subject: '',
@@ -346,8 +350,11 @@
             pre() {
                 this.active--;
             },
-            handleAvatarSuccess(res, file) {
-                this.caseObj.img = res;
+            uploadSupplementSuccess(res, file) {
+                this.caseObj.imgSupplement.push(res.path);
+            },
+            removeSupplement(file,fileList){
+                console.log(file,fileList);
             },
             uploadOcr(res, file) {
                 this.caseObj.img = res.path;
