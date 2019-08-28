@@ -67,18 +67,41 @@
                     <el-input type="textarea" :rows="3" v-model="caseObj.introduce"></el-input>
                 </el-form-item>
                 <el-form-item label="补充图片">
-                    <el-upload
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            list-type="picture-card"
-                    >
+                    <el-upload action="/upload"
+                               list-type="picture-card"
+                               :on-success="uploadSupplementImg"
+                               :on-remove="removeSupplementImg"
+                               name="img"
+                               :headers="{'X-XSRF-TOKEN':csrfToken}"
+                               accept=".jpg,.png,.bmp">
                         <i class="el-icon-plus"></i>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="案例答案" prop="answer">
-                    <el-input v-model="caseObj.answer"></el-input>
+                    <el-upload
+                            class="avatar-uploader"
+                            action="/upload"
+                            :show-file-list="false"
+                            :on-success="uploadAnswer"
+                            name="img"
+                            :headers="{'X-XSRF-TOKEN':csrfToken}"
+                            accept=".jpg,.png,.bmp">
+                        <img v-if="caseObj.answer" :src="caseObj.answer" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item label="案例提示" prop="tip">
-                    <el-input v-model="caseObj.tip"></el-input>
+                    <el-upload
+                            class="avatar-uploader"
+                            action="/upload"
+                            :show-file-list="false"
+                            :on-success="uploadTip"
+                            name="img"
+                            :headers="{'X-XSRF-TOKEN':csrfToken}"
+                            accept=".jpg,.png,.bmp">
+                        <img v-if="caseObj.tip" :src="caseObj.tip" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item>
                     <el-button style="margin-top: 12px;" @click="next('form0')">下一步</el-button>
@@ -86,7 +109,7 @@
             </el-form>
             <el-form :model="caseObj" :rules="rule1" ref="form1" label-width="100px" v-show="active===1">
                 <el-form-item label="学科属性" prop="subject">
-                    <el-select v-model="caseObj.subject" placeholder="请选择">
+                    <el-select v-model="caseObj.subject" multiple placeholder="请选择">
                         <el-option
                                 v-for="item in subject"
                                 :key="item.value"
@@ -95,8 +118,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="思维属性" prop="think">
-                    <el-select v-model="caseObj.think" placeholder="请选择">
+                <el-form-item v-for="(t,index) in caseObj.think" label="思维">
+                    <el-select v-model="t.type" placeholder="属性">
                         <el-option
                                 v-for="item in think"
                                 :key="item.value"
@@ -104,9 +127,7 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="思维难度" prop="think_difficulty">
-                    <el-select v-model="caseObj.think_difficulty" placeholder="请选择">
+                    <el-select v-model="t.difficulty" placeholder="难度">
                         <el-option
                                 v-for="item in difficulty"
                                 :key="item.value"
@@ -114,9 +135,14 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
+                    <el-button v-if="caseObj.think.length>1" type="danger" icon="el-icon-delete" circle
+                               @click="deleteThink(index)"></el-button>
                 </el-form-item>
-                <el-form-item label="能力属性" prop="ability">
-                    <el-select v-model="caseObj.ability" placeholder="请选择">
+                <el-form-item>
+                    <el-button type="primary" icon="el-icon-plus" @click="addThink"></el-button>
+                </el-form-item>
+                <el-form-item v-for="(t,index) in caseObj.ability"  label="能力">
+                    <el-select v-model="t.type" placeholder="属性">
                         <el-option
                                 v-for="item in ability"
                                 :key="item.value"
@@ -124,9 +150,7 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="能力难度" prop="ability_difficulty">
-                    <el-select v-model="caseObj.ability_difficulty" placeholder="请选择">
+                    <el-select v-model="t.difficulty" placeholder="难度">
                         <el-option
                                 v-for="item in difficulty"
                                 :key="item.value"
@@ -134,9 +158,14 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
+                    <el-button v-if="caseObj.ability.length>1" type="danger" icon="el-icon-delete" circle
+                               @click="deleteAbility(index)"></el-button>
                 </el-form-item>
-                <el-form-item label="知识属性" prop="knowledge">
-                    <el-select v-model="caseObj.knowledge" placeholder="请选择">
+                <el-form-item>
+                    <el-button type="primary" icon="el-icon-plus" @click="addAbility"></el-button>
+                </el-form-item>
+                <el-form-item v-for="(t,index) in caseObj.knowledge" label="知识">
+                    <el-select v-model="t.type" placeholder="属性">
                         <el-option
                                 v-for="item in knowledge"
                                 :key="item.value"
@@ -144,9 +173,7 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="知识难度" prop="knowledge_difficulty">
-                    <el-select v-model="caseObj.knowledge_difficulty" placeholder="请选择">
+                    <el-select v-model="t.difficulty" placeholder="难度">
                         <el-option
                                 v-for="item in difficulty"
                                 :key="item.value"
@@ -154,6 +181,11 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
+                    <el-button v-if="caseObj.knowledge.length>1" type="danger" icon="el-icon-delete" circle
+                               @click="deleteKnowledge(index)"></el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" icon="el-icon-plus" @click="addKnowledge"></el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button style="margin-top: 12px;" @click="pre">上一步</el-button>
@@ -216,18 +248,24 @@
                 caseObj: {
                     bookId: '',
                     pageNumber: 0,
-                    title: '',
                     introduce: '',
                     img: '',
+                    supplementImages: [],
                     answer: '',
                     tip: '',
-                    subject: '',
-                    think: '',
-                    think_difficulty: '',
-                    ability: '',
-                    ability_difficulty: '',
-                    knowledge: '',
-                    knowledge_difficulty: '',
+                    subject: [],
+                    think: [{
+                        type: '',
+                        difficulty: '',
+                    }],
+                    ability: [{
+                        type: '',
+                        difficulty: '',
+                    }],
+                    knowledge: [{
+                        type: '',
+                        difficulty: '',
+                    }],
                     place: '',
                     scene: '',
                     character: '',
@@ -237,7 +275,7 @@
                 },
                 books: [],
                 dialogVisible: false,
-                active: 0,
+                active: 1,
                 csrfToken: this.$cookies.get('XSRF-TOKEN'),
                 rule0: {
                     bookId: [{required: true, message: '请选择书名', trigger: 'blur'}],
@@ -353,6 +391,22 @@
                 this.caseObj.img = res.path;
                 this.caseObj.introduce = res.ocr;
             },
+            uploadSupplementImg(res, file) {
+                this.caseObj.supplementImages.push(res.path);
+            },
+            removeSupplementImg(file, fileList) {
+                let images = [];
+                for (let i = 0; i < fileList.length; i++) {
+                    images.push(fileList[i].response.path);
+                }
+                this.caseObj.supplementImages = images;
+            },
+            uploadAnswer(res, file) {
+                this.caseObj.answer = res.path;
+            },
+            uploadTip(res, file) {
+                this.caseObj.tip = res.path;
+            },
             getCases() {
                 axios.get('/documents')
                     .then((response) => {
@@ -380,7 +434,25 @@
                     .catch((error) => {
                         console.log(error);
                     })
-            }
+            },
+            addThink() {
+                this.caseObj.think.push({type: '', difficulty: ''});
+            },
+            deleteThink(index) {
+                this.caseObj.think.splice(index, 1);
+            },
+            addAbility() {
+                this.caseObj.ability.push({type: '', difficulty: ''});
+            },
+            deleteAbility(index) {
+                this.caseObj.ability.splice(index, 1);
+            },
+            addKnowledge() {
+                this.caseObj.knowledge.push({type: '', difficulty: ''});
+            },
+            deleteKnowledge(index) {
+                this.caseObj.knowledge.splice(index, 1);
+            },
         },
         mounted() {
             this.getCases();
