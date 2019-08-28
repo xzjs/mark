@@ -85,7 +85,7 @@
         },
         methods: {
             uploadSuccess(response, file, fileList) {
-                this.book.path = response;
+                this.book.path = response.path;
             },
             handleClose(done) {
                 this.$confirm('确认关闭？')

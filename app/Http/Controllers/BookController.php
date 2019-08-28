@@ -57,8 +57,8 @@ class BookController extends Controller
             'path' => 'required|max:255',
         ]);
         $book = new Book();
-        $book->name = $request->name;
-        $book->path = $request->path;
+        $book->name = $request->input('name');
+        $book->path = $request->input('path');
         $book->saveOrFail();
         $users = User::select('id')
             ->where('type', 1)

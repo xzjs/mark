@@ -5985,7 +5985,7 @@ exports.default = {
 
     methods: {
         uploadSuccess: function uploadSuccess(response, file, fileList) {
-            this.book.path = response;
+            this.book.path = response.path;
         },
         handleClose: function handleClose(done) {
             var _this = this;
@@ -6242,6 +6242,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
 
 var _vuex = __webpack_require__(17);
 
@@ -6254,9 +6258,9 @@ exports.default = {
             caseObj: {
                 bookId: '',
                 pageNumber: 0,
-                title: '',
-                introduce: '',
                 img: '',
+                introduce: '',
+                imgSupplement: [],
                 answer: '',
                 tip: '',
                 subject: '',
@@ -6353,8 +6357,11 @@ exports.default = {
         pre: function pre() {
             this.active--;
         },
-        handleAvatarSuccess: function handleAvatarSuccess(res, file) {
-            this.caseObj.img = res;
+        uploadSupplementSuccess: function uploadSupplementSuccess(res, file) {
+            this.caseObj.imgSupplement.push(res.path);
+        },
+        removeSupplement: function removeSupplement(file, fileList) {
+            console.log(file, fileList);
         },
         uploadOcr: function uploadOcr(res, file) {
             this.caseObj.img = res.path;
@@ -96697,11 +96704,34 @@ var render = function() {
                     "el-upload",
                     {
                       attrs: {
-                        action: "https://jsonplaceholder.typicode.com/posts/",
-                        "list-type": "picture-card"
+                        action: "/upload",
+                        "list-type": "picture-card",
+                        "on-success": _vm.uploadSupplementSuccess,
+                        "on-remove": _vm.removeSupplement
                       }
                     },
                     [_c("i", { staticClass: "el-icon-plus" })]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "el-dialog",
+                    {
+                      attrs: { visible: _vm.dialogVisible },
+                      on: {
+                        "update:visible": function($event) {
+                          _vm.dialogVisible = $event
+                        }
+                      }
+                    },
+                    [
+                      _c("img", {
+                        attrs: {
+                          width: "100%",
+                          src: _vm.dialogImageUrl,
+                          alt: ""
+                        }
+                      })
+                    ]
                   )
                 ],
                 1
@@ -97447,7 +97477,7 @@ var content = __webpack_require__(170);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(12)("07707d3c", content, false, {});
+var update = __webpack_require__(12)("0bd24556", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -97473,7 +97503,7 @@ var content = __webpack_require__(171);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(12)("3b3af626", content, false, {});
+var update = __webpack_require__(12)("2ae72140", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -97499,7 +97529,7 @@ var content = __webpack_require__(172);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(12)("9c027460", content, false, {});
+var update = __webpack_require__(12)("6e13283d", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -97525,7 +97555,7 @@ var content = __webpack_require__(173);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(12)("278738a2", content, false, {});
+var update = __webpack_require__(12)("2fb12315", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -97551,7 +97581,7 @@ var content = __webpack_require__(174);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(12)("851d1994", content, false, {});
+var update = __webpack_require__(12)("897ee1ae", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -97577,7 +97607,7 @@ var content = __webpack_require__(175);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(12)("461d938e", content, false, {});
+var update = __webpack_require__(12)("43ecaf81", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -97603,7 +97633,7 @@ var content = __webpack_require__(176);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(12)("f02e3eae", content, false, {});
+var update = __webpack_require__(12)("645d2fc9", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
