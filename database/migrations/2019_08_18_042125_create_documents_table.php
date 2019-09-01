@@ -16,19 +16,26 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('book_id');
+            $table->integer('pageNumber');
             $table->string('introduce');
             $table->string('img');
+            $table->text('supplementImages');
             $table->string('answer');
             $table->string('tip');
+            $table->string('subject');
+            $table->string('think');
+            $table->string('ability');
+            $table->string('knowledge');
             $table->string('place');
             $table->string('scene');
             $table->string('character');
             $table->string('tool')->comment('道具');
-            $table->integer('problem')->comment('问题承载');
-            $table->integer('result')->comment('收获习得');
+            $table->string('problem')->comment('问题承载');
+            $table->string('result')->comment('收获习得');
             $table->integer('user_id');
-            $table->integer('start_at');
+            $table->integer('cost');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

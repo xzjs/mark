@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DocumentController extends Controller
 {
@@ -15,12 +16,24 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        $id = Auth::user()->id;
-        $documents = Document::where('user_id', $id)
-            ->select('id', 'title', 'created_at')
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->toArray();
+        $user = Auth::user();
+        if ($user->type === 0) {
+            $documents = Document::with('book:name')
+                ->latest()
+                ->get()
+                ->toArray();
+        } else {
+            $documents = Document::with('book:id,name')
+                ->where('user_id', $user->id)
+                ->latest()
+                ->get()
+                ->toArray();
+        }
+        if ($documents) {
+            foreach ($documents as $key => $document) {
+                $documents[$key] = $this->deserialize($document);
+            }
+        }
         return response()->json($documents);
     }
 
@@ -44,39 +57,38 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|max:255',
+            'book_id' => 'required',
+            'pageNumber' => 'required',
             'introduce' => 'required|max:255',
-            'img' => 'required|max:255',
-            'answer' => 'required|max:255',
-            'tip' => 'required|max:255',
-            'subject' => 'required|integer|min:0|max:2',
-            'think' => 'required|integer|min:0|max:3',
-            'think_difficulty' => 'required|integer|min:0|max:2',
-            'ability' => 'required|integer|min:0|max:2',
-            'ability_difficulty' => 'required|integer|min:0|max:2',
-            'knowledge' => 'required|integer|min:0|max:1',
-            'knowledge_difficulty' => 'required|integer|min:0|max:2',
+            'img' => 'required',
+            'supplementImages' => 'required|array',
+            'answer' => 'required',
+            'tip' => 'required',
+            'subject' => 'required|array',
+            'think' => 'required|array',
+            'ability' => 'required|array',
+            'knowledge' => 'required|array',
             'place' => 'required|max:255',
             'scene' => 'required|max:255',
             'character' => 'required|max:255',
             'tool' => 'required|max:255',
-            'problem' => 'required|integer|min:0|max:5',
-            'result' => 'required|integer|min:0|max:2'
+            'problem' => 'required|max:255',
+            'result' => 'required|max:255',
+            'start' => 'required|integer',
         ]);
 
         $document = new Document();
-        $document->title = $request->input('title');
+        $document->book_id = $request->input('book_id');
+        $document->pageNumber = $request->input('pageNumber');
         $document->introduce = $request->input('introduce');
         $document->img = $request->input('img');
+        $document->supplementImages = json_encode($request->input('supplementImages'));
         $document->answer = $request->input('answer');
         $document->tip = $request->input('tip');
-        $document->subject = $request->input('subject');
-        $document->think = $request->input('think');
-        $document->think_difficulty = $request->input('think_difficulty');
-        $document->ability = $request->input('ability');
-        $document->ability_difficulty = $request->input('ability_difficulty');
-        $document->knowledge = $request->input('knowledge');
-        $document->knowledge_difficulty = $request->input('knowledge_difficulty');
+        $document->subject = json_encode($request->input('subject'));
+        $document->think = json_encode($request->input('think'));
+        $document->ability = json_encode($request->input('ability'));
+        $document->knowledge = json_encode($request->input('knowledge'));
         $document->place = $request->input('place');
         $document->scene = $request->input('scene');
         $document->character = $request->input('character');
@@ -84,6 +96,7 @@ class DocumentController extends Controller
         $document->problem = $request->input('problem');
         $document->result = $request->input('result');
         $document->user_id = Auth::user()->id;
+        $document->cost = (time() - $request->input('start') / 1000);
         $document->saveOrFail();
         return response()->json($document->id);
     }
@@ -120,7 +133,49 @@ class DocumentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'book_id' => 'required',
+            'pageNumber' => 'required',
+            'introduce' => 'required|max:255',
+            'img' => 'required',
+            'supplementImages' => 'required|array',
+            'answer' => 'required',
+            'tip' => 'required',
+            'subject' => 'required|array',
+            'think' => 'required|array',
+            'ability' => 'required|array',
+            'knowledge' => 'required|array',
+            'place' => 'required|max:255',
+            'scene' => 'required|max:255',
+            'character' => 'required|max:255',
+            'tool' => 'required|max:255',
+            'problem' => 'required|max:255',
+            'result' => 'required|max:255',
+            'start' => 'required|integer',
+        ]);
+
+        $document = Document::find($id);
+        $document->book_id = $request->input('book_id');
+        $document->pageNumber = $request->input('pageNumber');
+        $document->introduce = $request->input('introduce');
+        $document->img = $request->input('img');
+        $document->supplementImages = json_encode($request->input('supplementImages'));
+        $document->answer = $request->input('answer');
+        $document->tip = $request->input('tip');
+        $document->subject = json_encode($request->input('subject'));
+        $document->think = json_encode($request->input('think'));
+        $document->ability = json_encode($request->input('ability'));
+        $document->knowledge = json_encode($request->input('knowledge'));
+        $document->place = $request->input('place');
+        $document->scene = $request->input('scene');
+        $document->character = $request->input('character');
+        $document->tool = $request->input('tool');
+        $document->problem = $request->input('problem');
+        $document->result = $request->input('result');
+        $document->user_id = Auth::user()->id;
+        $document->cost = $document->cost + (time() - $request->input('start') / 1000);
+        $document->saveOrFail();
+        return response()->json($document->id);
     }
 
     /**
@@ -131,6 +186,26 @@ class DocumentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $count = Document::destroy($id);
+        if ($count != 1) {
+            return response(['message' => '删除失败'], 500);
+        } else {
+            return response('成功');
+        }
+    }
+
+    /**
+     * 反序列化
+     * @param $document
+     * @return mixed
+     */
+    protected function deserialize($document)
+    {
+        $document['supplementImages'] = json_decode($document['supplementImages'], true);
+        $document['subject'] = json_decode($document['subject'], true);
+        $document['think'] = json_decode($document['think'], true);
+        $document['ability'] = json_decode($document['ability'], true);
+        $document['knowledge'] = json_decode($document['knowledge'], true);
+        return $document;
     }
 }

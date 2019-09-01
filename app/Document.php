@@ -3,10 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Document extends Model
 {
-    public function subjects(){
-        return $this->belongsToMany('App\Subject');
+    use SoftDeletes;
+
+    public function book()
+    {
+        return $this->belongsTo('App\Book');
     }
 }
