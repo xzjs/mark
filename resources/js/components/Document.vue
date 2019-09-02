@@ -35,7 +35,7 @@
                     label="补充图片">
                 <template slot-scope="scope">
                     <a v-for="supple in scope.row.supplementImages"
-                       :href="supple"
+                       :href="supple.url"
                        target="_blank">
                         <el-image :src="supple.url"></el-image>
                     </a>

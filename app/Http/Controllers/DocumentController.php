@@ -18,7 +18,7 @@ class DocumentController extends Controller
     {
         $user = Auth::user();
         if ($user->type === 0) {
-            $documents = Document::with('book:name')
+            $documents = Document::with('book:id,name')
                 ->latest()
                 ->get()
                 ->toArray();
