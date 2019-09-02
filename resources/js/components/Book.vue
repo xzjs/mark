@@ -107,6 +107,10 @@
                                 this.$refs.upload.clearFiles();
                                 this.dialogVisible = false;
                             })
+                            .catch((error) => {
+                                console.log(error.response);
+                                this.$message.error(error.response.data);
+                            })
                     } else {
                         return false;
                     }

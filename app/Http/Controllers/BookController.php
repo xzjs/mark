@@ -56,6 +56,10 @@ class BookController extends Controller
             'name' => 'required|max:255',
             'path' => 'required|max:255',
         ]);
+        $userCount = User::where('type', '>', 0)->count();
+        if ($userCount < 2) {
+            return response('用户数不足，请先添加用户', 500);
+        }
         $book = new Book();
         $book->name = $request->input('name');
         $book->path = $request->input('path');
@@ -66,7 +70,7 @@ class BookController extends Controller
             ->toArray();
         $userKeys = array_rand($users, 2);
         foreach ($userKeys as $userKey) {
-            $userids[]=$users[$userKey]['id'];
+            $userids[] = $users[$userKey]['id'];
         }
         $book->users()->attach($userids);
         return response()->json($book->id);
