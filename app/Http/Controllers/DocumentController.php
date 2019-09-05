@@ -56,12 +56,13 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
+        Log::notice($request->all());
         $request->validate([
             'book_id' => 'required',
             'pageNumber' => 'required',
             'introduce' => 'required|max:255',
             'img' => 'required',
-            'supplementImages' => 'required|array',
+            'supplementImages' => 'array',
             'answer' => 'required',
             'tip' => 'required',
             'subject' => 'required|array',
