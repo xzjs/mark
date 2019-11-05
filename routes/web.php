@@ -23,5 +23,6 @@ Route::middleware(['auth'])->group(function () {
         'documents' => 'DocumentController',
         'books' => 'BookController',
         'users' => 'UserController',
+        'mathmarks' => 'MathMarkController',
     ]);
 });

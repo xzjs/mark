@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name')->unique();
             $table->string('password');
             $table->smallInteger('type')->comment('类型');
+            $table->smallInteger('subject')->comment('学科');
             $table->timestamps();
         });
     }

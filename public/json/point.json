@@ -1,0 +1,30 @@
+[
+  {
+    "value": "数字",
+    "label": "数字",
+    "children": [
+      {
+        "value": "计数",
+        "label": "计数",
+        "children": [
+          {
+            "value": "枚举法",
+            "label": "枚举法",
+            "children": [
+              {
+                "value": "类型",
+                "label": "类型",
+                "children": [
+                  {
+                    "value": "有序枚举",
+                    "label": "有序枚举"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -6,50 +6,70 @@
                 :data="books"
                 style="width: 100%">
             <el-table-column
-                    prop="name"
-                    label="书名"
-                    width="180">
+                    prop="id"
+                    label="编号"
+                    width="50px">
             </el-table-column>
             <el-table-column
-                    prop="path"
-                    label="路径">
+                    prop="topic"
+                    label="题目"
+                    width="180px">
+            </el-table-column>
+            <el-table-column
+                    prop="legends"
+                    label="图例">
                 <template slot-scope="scope">
-                    <a :href="scope.row.path" target="_blank">查看</a>
+                    <div v-for="legend in scope.row.legends">
+                        <el-image :src="legend" fit="contain"></el-image>
+                    </div>
                 </template>
             </el-table-column>
             <el-table-column
-                    v-if="user.type === 0"
-                    prop="users"
-                    label="分配用户">
+                    prop="answers"
+                    label="答案">
                 <template slot-scope="scope">
-                    <li v-for="bookUser in scope.row.users">
-                        {{bookUser.name}}
-                    </li>
+                    <div v-for="answer in scope.row.answers">
+                        <el-image :src="answer" fit="contain"></el-image>
+                    </div>
                 </template>
             </el-table-column>
         </el-table>
         <el-dialog
-                title="添加图书"
+                title="添加案例"
                 :visible.sync="dialogVisible"
                 width="80%"
                 :before-close="handleClose">
             <el-form :model="book" :rules="rule" ref="form">
-                <el-form-item label="图书名称" label-width="100px" prop="name">
-                    <el-input v-model="book.name" autocomplete="off"></el-input>
+                <el-form-item label="题目" label-width="100px" prop="topic">
+                    <el-input
+                            type="textarea"
+                            :rows="2"
+                            placeholder="请输入题目内容"
+                            v-model="book.topic">
+                    </el-input>
                 </el-form-item>
-                <el-form-item label="图书上传" label-width="100px" prop="path">
+                <el-form-item label="图例" label-width="100px" prop="legend">
                     <el-upload
-                            ref="upload"
-                            class="upload-demo"
-                            drag
+                            ref="legend"
+                            list-type="picture-card"
                             action="/upload"
                             name="img"
-                            accept=".pdf"
-                            :on-success="uploadSuccess"
+                            accept="image/*"
+                            :on-success="uploadLegendSuccess"
                             :headers="{'X-XSRF-TOKEN':csrfToken}">
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传pdf文件</div>
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="答案" label-width="100px" prop="answer">
+                    <el-upload
+                            ref="answer"
+                            list-type="picture-card"
+                            action="/upload"
+                            name="img"
+                            accept="image/*"
+                            :on-success="uploadAnswerSuccess"
+                            :headers="{'X-XSRF-TOKEN':csrfToken}">
+                        <i class="el-icon-plus"></i>
                     </el-upload>
                 </el-form-item>
             </el-form>
@@ -71,27 +91,33 @@
         data() {
             return {
                 book: {
-                    name: '',
-                    path: '',
+                    topic: '',
+                    legends: [],
+                    answers: [],
                 },
                 books: [],
                 dialogVisible: false,
                 csrfToken: this.$cookies.get('XSRF-TOKEN'),
                 rule: {
-                    name: [{required: true, message: '请输入书名', trigger: 'blur'}],
-                    path: [{required: true, message: '请上传pdf', trigger: 'blur'}],
+                    topic: [{required: true, message: '请输入书名', trigger: 'blur'}],
+                    legends: [{required: true, message: '请上传pdf', trigger: 'blur'}],
+                    answers: [{required: true, message: '请上传pdf', trigger: 'blur'}],
                 }
             }
         },
         methods: {
-            uploadSuccess(response, file, fileList) {
-                this.book.path = response.path;
+            uploadLegendSuccess(response, file, fileList) {
+                this.book.legends.push(response.path);
+            },
+            uploadAnswerSuccess(response, file, fileList) {
+                this.book.answers.push(response.path);
             },
             handleClose(done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
                         this.book = {};
-                        this.$refs.upload.clearFiles();
+                        this.$refs.legend.clearFiles();
+                        this.$refs.answer.clearFiles();
                         done();
                     })
                     .catch(_ => {
@@ -104,7 +130,8 @@
                             .then((response) => {
                                 this.getBooks();
                                 this.$refs.form.resetFields();
-                                this.$refs.upload.clearFiles();
+                                this.$refs.legend.clearFiles();
+                                this.$refs.answer.clearFiles();
                                 this.dialogVisible = false;
                             })
                             .catch((error) => {

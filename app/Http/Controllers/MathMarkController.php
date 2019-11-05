@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
-use App\User;
+use App\MathMark;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class BookController extends Controller
+class MathMarkController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,12 +14,12 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::all()->toArray();
-        foreach ($books as &$book) {
-            $book['legends'] = json_decode($book['legends']);
-            $book['answers'] = json_decode($book['answers']);
+        $mathMarks = MathMark::all()->toArray();
+        foreach ($mathMarks as &$mathMark) {
+            $mathMark['scene'] = json_decode($mathMark['scene']);
+            $mathMark['point'] = json_decode($mathMark['point']);
         }
-        return response()->json($books);
+        return response()->json($mathMarks);
     }
 
     /**
@@ -38,22 +36,38 @@ class BookController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return void
+     * @return \Illuminate\Http\Response
      * @throws \Throwable
      */
     public function store(Request $request)
     {
         $request->validate([
-            'topic' => 'required|max:255',
-            'legends' => 'required|array',
-            'answers' => 'required|array',
+            'book_id' => 'required|integer',
+            'scene' => 'required|array',
+            'communication' => 'required',
+            'strategy' => 'required',
+            'mathematicization' => 'required',
+            'symbol' => 'required',
+            'representation' => 'required',
+            'reasoning' => 'required',
+            'knowledge' => 'required',
+            'point' => 'required|array',
         ]);
-        $book = new Book();
-        $book->topic = $request->input('topic');
-        $book->legends = json_encode($request->input('legends'));
-        $book->answers = json_encode($request->input('answers'));
-        $book->saveOrFail();
-        return response()->json($book->id);
+
+        $mathMark = new MathMark();
+        $mathMark->book_id = $request->book_id;
+        $mathMark->scene = json_encode($request->scene);
+        $mathMark->communication = $request->communication;
+        $mathMark->strategy = $request->strategy;
+        $mathMark->mathematicization = $request->mathematicization;
+        $mathMark->symbol = $request->symbol;
+        $mathMark->representation = $request->representation;
+        $mathMark->reasoning = $request->reasoning;
+        $mathMark->knowledge = $request->knowledge;
+        $mathMark->point = json_encode($request->point);
+
+        $mathMark->saveOrFail();
+        return response()->json($mathMark->id);
     }
 
     /**

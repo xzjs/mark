@@ -1,0 +1,22 @@
+[
+  {
+    "value": "社会",
+    "label": "社会",
+    "children": [
+      {
+        "value": "新闻",
+        "label": "新闻",
+        "children": [
+          {
+            "value": "时政",
+            "label": "时政"
+          },
+          {
+            "value": "军事",
+            "label": "军事"
+          }
+        ]
+      }
+    ]
+  }
+]
