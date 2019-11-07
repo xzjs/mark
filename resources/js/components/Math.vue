@@ -57,7 +57,7 @@
                     <el-tag v-for="item in scope.row.point">{{item.join('-')}}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column v-if="user.type === 0" label="标注人" prop="" width="50px">
+            <el-table-column v-if="user.type === 0" label="标注人" prop="" width="100px" prop="user.name">
             </el-table-column>
             <el-table-column v-if="user.type === 0" label="花费时间(s)" prop="cost" width="50px">
             </el-table-column>

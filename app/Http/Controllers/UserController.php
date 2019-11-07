@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         if ($user->isAdmin()) {
-            $users = User::select('name')->where('type', 1)->get()->toArray();
+            $users = User::all()->toArray();
             return response()->json($users);
         } else {
             return response('权限不足', 403);

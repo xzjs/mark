@@ -10,6 +10,11 @@
                     label="用户名"
                     align="center">
             </el-table-column>
+            <el-table-column
+                    prop="type"
+                    label="标注类型"
+                    align="center">
+            </el-table-column>
         </el-table>
         <el-dialog
                 title="添加用户"

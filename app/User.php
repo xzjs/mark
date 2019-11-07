@@ -27,8 +27,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function books(){
-        return $this->belongsToMany('App\Book');
+    public function mathMarks(){
+        return $this->belongsToMany('App\MathMark');
     }
 
     public function isAdmin(){
