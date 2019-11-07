@@ -11,7 +11,9 @@
         "guzzlehttp/guzzle": "~6.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "predis/predis": "^1.1"
+        "league/flysystem": "^1.0",
+        "predis/predis": "^1.1",
+        "zgldh/qiniu-laravel-storage": "^0.10.3"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\MathMark;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MathMarkController extends Controller
 {
@@ -14,7 +15,12 @@ class MathMarkController extends Controller
      */
     public function index()
     {
-        $mathMarks = MathMark::all()->toArray();
+        $user = Auth::user();
+        if ($user->type === 0) {
+            $mathMarks = MathMark::all()->toArray();
+        } else {
+            $mathMarks = MathMark::whereIn('id', [1, $user->id])->get()->toArray();
+        }
         foreach ($mathMarks as &$mathMark) {
             $mathMark['scene'] = json_decode($mathMark['scene']);
             $mathMark['point'] = json_decode($mathMark['point']);
@@ -52,6 +58,7 @@ class MathMarkController extends Controller
             'reasoning' => 'required',
             'knowledge' => 'required',
             'point' => 'required|array',
+            'start' => 'required',
         ]);
 
         $mathMark = new MathMark();
@@ -65,6 +72,8 @@ class MathMarkController extends Controller
         $mathMark->reasoning = $request->reasoning;
         $mathMark->knowledge = $request->knowledge;
         $mathMark->point = json_encode($request->point);
+        $mathMark->cost = (time() - $request->input('start') / 1000);
+        $mathMark->user_id = Auth::user()->id;
 
         $mathMark->saveOrFail();
         return response()->json($mathMark->id);

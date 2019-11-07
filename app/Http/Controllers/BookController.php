@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
+    private $host;
+
+    public function __construct()
+    {
+        $this->host = config('services.qiniu.host');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,8 +25,8 @@ class BookController extends Controller
     {
         $books = Book::all()->toArray();
         foreach ($books as &$book) {
-            $book['legends'] = json_decode($book['legends']);
-            $book['answers'] = json_decode($book['answers']);
+            $book['legends'] = array_map([$this, 'appendHost'], json_decode($book['legends']));
+            $book['answers'] = array_map([$this, 'appendHost'], json_decode($book['answers']));
         }
         return response()->json($books);
     }
@@ -99,5 +106,15 @@ class BookController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * 拼接图片路径
+     * @param $img
+     * @return string
+     */
+    private function appendHost($img)
+    {
+        return $this->host . $img . '-small';
     }
 }

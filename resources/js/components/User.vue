@@ -17,10 +17,17 @@
                 width="80%"
                 :before-close="handleClose">
             <el-form :model="user" :rules="rule" ref="form">
-                <el-form-item label="用户名" label-width="100px" prop="name">
+                <el-form-item label="用户名" prop="name">
                     <el-input v-model="user.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" label-width="100px">
+                <el-form-item label="标注类型" prop="type">
+                    <el-select v-model="user.type">
+                        <el-option label="数学" value="1"></el-option>
+                        <el-option label="计算机" value="2"></el-option>
+                        <el-option label="批判性思维" value="3"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="密码">
                     初始密码为111111
                 </el-form-item>
             </el-form>
@@ -39,11 +46,13 @@
             return {
                 user: {
                     name: "",
+                    type: '',
                 },
                 users: [],
                 dialogVisible: false,
                 rule: {
                     name: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+                    type: [{required: true, message: '请选择标注类型', trigger: 'blur'}],
                 }
             }
         },

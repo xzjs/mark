@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button v-if="user.type === 0" type="primary" icon="el-icon-edit" @click="dialogVisible=true">添加</el-button>
+        <el-button type="primary" icon="el-icon-edit" @click="showDialog">添加</el-button>
         <el-table
                 border
                 :data="maths"
@@ -57,6 +57,10 @@
                     <el-tag v-for="item in scope.row.point">{{item.join('-')}}</el-tag>
                 </template>
             </el-table-column>
+            <el-table-column v-if="user.type === 0" label="标注人" prop="" width="50px">
+            </el-table-column>
+            <el-table-column v-if="user.type === 0" label="花费时间(s)" prop="cost" width="50px">
+            </el-table-column>
         </el-table>
         <el-dialog
                 title="标注"
@@ -74,7 +78,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="情镜" prop="scene">
+                <el-form-item label="情境" prop="scene">
                     <el-cascader v-model="math.scene" :options="sceneOptions"></el-cascader>
                 </el-form-item>
                 <el-form-item label="PISA能力等级-沟通" prop="communication">
@@ -165,6 +169,7 @@
                     reasoning: '',
                     knowledge: '',
                     point: '',
+                    start: '',
                 },
                 maths: [],
                 sceneOptions: [],
@@ -191,6 +196,10 @@
             ...mapState(['user'])
         },
         methods: {
+            showDialog() {
+                this.dialogVisible = true;
+                this.math.start = (new Date()).getTime();
+            },
             getMaths: function () {
                 axios.get('mathmarks')
                     .then(response => {

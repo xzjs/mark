@@ -35,4 +35,11 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'qiniu' => [
+        'ak' => env('AK'),
+        'sk' => env('SK'),
+        'bucket' => env('BUCKET'),
+        'host' => env('QI_NIU_HOST'),
+    ]
+
 ];

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
+use Qiniu\Auth;
+use Qiniu\Storage\UploadManager;
 
 class UploadController extends Controller
 {
@@ -37,7 +38,24 @@ class UploadController extends Controller
      */
     public function store(Request $request)
     {
-        $path = $request->file('img')->store('public');
+        $accessKey = config('services.qiniu.ak');
+        $secretKey = config('services.qiniu.sk');
+        $bucket = config('services.qiniu.bucket');
+
+        $file = $request->file('img');
+
+        $auth = new Auth($accessKey, $secretKey);
+        $token = $auth->uploadToken($bucket);
+
+        $uploadMgr = new UploadManager();
+        $data = file_get_contents($file);
+        list($ret, $err) = $uploadMgr->put($token, null, $data);
+        if ($err !== null) {
+            return response($err,400);
+        } else {
+            $key = $ret['key'];
+        }
+
         $type = $request->input('type');
         switch ($type) {
             case 'ocr':
@@ -46,8 +64,8 @@ class UploadController extends Controller
             default:
                 break;
         }
-        $path = Storage::url($path);
-        $output['path'] = $path;
+
+        $output['path'] = $key;
         return response()->json($output);
     }
 
