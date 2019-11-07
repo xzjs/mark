@@ -24,7 +24,7 @@ class CreateMathMarksTable extends Migration
             $table->integer('representation')->comment('表征');
             $table->integer('reasoning')->comment('推理论证');
             $table->string('knowledge')->comment('知识情景');
-            $table->string('point')->comment('知识点');
+            $table->text('point')->comment('知识点');
             $table->string('user_id')->comment('用户id');
             $table->integer('cost')->comment('花费时间');
             $table->timestamps();
