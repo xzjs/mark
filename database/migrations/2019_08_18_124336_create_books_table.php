@@ -17,7 +17,7 @@ class CreateBooksTable extends Migration
             $table->increments('id');
             $table->text('topic')->comment('题目');
             $table->text('legends')->comment('图例');
-            $table->text('answers')->comment('答案');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

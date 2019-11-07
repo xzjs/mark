@@ -22,6 +22,7 @@ class MathMarkController extends Controller
             $mathMarks = MathMark::with('user:id,name')->whereIn('id', [1, $user->id])->get()->toArray();
         }
         foreach ($mathMarks as &$mathMark) {
+            $mathMark['answers'] = array_map([$this, 'appendHost'], json_decode($mathMark['answers']));
             $mathMark['scene'] = json_decode($mathMark['scene']);
             $mathMark['point'] = json_decode($mathMark['point']);
         }
@@ -49,6 +50,7 @@ class MathMarkController extends Controller
     {
         $request->validate([
             'book_id' => 'required|integer',
+            'answers' => 'required|array',
             'scene' => 'required|array',
             'communication' => 'required',
             'strategy' => 'required',
@@ -63,6 +65,7 @@ class MathMarkController extends Controller
 
         $mathMark = new MathMark();
         $mathMark->book_id = $request->book_id;
+        $mathMark->answers = json_encode($request->answers);
         $mathMark->scene = json_encode($request->scene);
         $mathMark->communication = $request->communication;
         $mathMark->strategy = $request->strategy;

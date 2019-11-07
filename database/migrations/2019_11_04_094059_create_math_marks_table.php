@@ -16,6 +16,7 @@ class CreateMathMarksTable extends Migration
         Schema::create('math_marks', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('book_id');
+            $table->string('answers');
             $table->string('scene')->comment('情景');
             $table->integer('communication')->comment('沟通');
             $table->integer('strategy')->comment('策略');
@@ -27,6 +28,7 @@ class CreateMathMarksTable extends Migration
             $table->text('point')->comment('知识点');
             $table->string('user_id')->comment('用户id');
             $table->integer('cost')->comment('花费时间');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

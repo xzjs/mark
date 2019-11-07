@@ -16,6 +16,15 @@
                     width="50px">
             </el-table-column>
             <el-table-column
+                    prop="answers"
+                    label="答案">
+                <template slot-scope="scope">
+                    <div v-for="answer in scope.row.answers">
+                        <el-image :src="answer+'-small'" fit="contain" :preview-src-list="scope.row.answers"></el-image>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column
                     prop="scene"
                     label="情境">
                 <template slot-scope="scope">
@@ -77,6 +86,18 @@
                                 :value="id">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="答案" prop="answers">
+                    <el-upload
+                            ref="answer"
+                            list-type="picture-card"
+                            action="/upload"
+                            name="img"
+                            accept="image/*"
+                            :on-success="uploadAnswerSuccess"
+                            :headers="{'X-XSRF-TOKEN':csrfToken}">
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item label="情境" prop="scene">
                     <el-cascader v-model="math.scene" :options="sceneOptions"></el-cascader>
@@ -160,6 +181,7 @@
                 ids: [],
                 math: {
                     book_id: '',
+                    answers: [],
                     scene: '',
                     communication: '',
                     strategy: '',
@@ -180,6 +202,7 @@
                 csrfToken: this.$cookies.get('XSRF-TOKEN'),
                 rule: {
                     book_id: [{required: true, message: '请选择', trigger: 'blur'}],
+                    answers: [{required: true, message: '请上传答案', trigger: 'blur'}],
                     scene: [{required: true, message: '请选择', trigger: 'blur'}],
                     communication: [{required: true, message: '请选择', trigger: 'blur'}],
                     strategy: [{required: true, message: '请选择', trigger: 'blur'}],
@@ -224,6 +247,7 @@
                 this.$confirm('确认关闭？')
                     .then(_ => {
                         this.math = {};
+                        this.$refs.answer.clearFiles();
                         done();
                     })
                     .catch(_ => {
@@ -246,6 +270,12 @@
                         return false;
                     }
                 });
+            },
+            uploadAnswerSuccess(response, file, fileList) {
+                this.math.answers.push(response.path);
+            },
+            showImg(answer) {
+
             }
         },
         mounted() {

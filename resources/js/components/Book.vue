@@ -25,12 +25,11 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    prop="answers"
-                    label="答案">
+                    fixed="right"
+                    label="操作"
+                    width="100">
                 <template slot-scope="scope">
-                    <div v-for="answer in scope.row.answers">
-                        <el-image :src="answer" fit="contain"></el-image>
-                    </div>
+                    <el-button @click="delete(scope.row.id)" type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -56,18 +55,6 @@
                             name="img"
                             accept="image/*"
                             :on-success="uploadLegendSuccess"
-                            :headers="{'X-XSRF-TOKEN':csrfToken}">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="答案" label-width="100px" prop="answer">
-                    <el-upload
-                            ref="answer"
-                            list-type="picture-card"
-                            action="/upload"
-                            name="img"
-                            accept="image/*"
-                            :on-success="uploadAnswerSuccess"
                             :headers="{'X-XSRF-TOKEN':csrfToken}">
                         <i class="el-icon-plus"></i>
                     </el-upload>
@@ -100,8 +87,6 @@
                 csrfToken: this.$cookies.get('XSRF-TOKEN'),
                 rule: {
                     topic: [{required: true, message: '请输入书名', trigger: 'blur'}],
-                    legends: [{required: true, message: '请上传pdf', trigger: 'blur'}],
-                    answers: [{required: true, message: '请上传pdf', trigger: 'blur'}],
                 }
             }
         },
@@ -117,7 +102,6 @@
                     .then(_ => {
                         this.book = {};
                         this.$refs.legend.clearFiles();
-                        this.$refs.answer.clearFiles();
                         done();
                     })
                     .catch(_ => {
@@ -131,7 +115,6 @@
                                 this.getBooks();
                                 this.$refs.form.resetFields();
                                 this.$refs.legend.clearFiles();
-                                this.$refs.answer.clearFiles();
                                 this.dialogVisible = false;
                             })
                             .catch((error) => {
@@ -151,6 +134,16 @@
                     .catch((error) => {
                         console.log(error);
                     })
+            },
+            delete(id) {
+                axios.delete('books/' + id)
+                    .then(response => {
+                        this.getBooks();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+
             }
         },
         mounted() {
