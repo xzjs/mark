@@ -66,9 +66,17 @@
                     <el-tag v-for="item in scope.row.point">{{item.join('-')}}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column v-if="user.type === 0" label="标注人" prop="" width="100px" prop="user.name">
+            <el-table-column v-if="user.type === 0" label="标注人" width="100px" prop="user.name">
             </el-table-column>
             <el-table-column v-if="user.type === 0" label="花费时间(s)" prop="cost" width="50px">
+            </el-table-column>
+            <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="100">
+                <template slot-scope="scope">
+                    <el-button @click="del(scope.$index, scope.row)" type="danger" size="small">删除</el-button>
+                </template>
             </el-table-column>
         </el-table>
         <el-dialog
@@ -76,94 +84,105 @@
                 :visible.sync="dialogVisible"
                 width="80%"
                 :before-close="handleClose">
-            <el-form :model="math" :rules="rule" ref="form" label-width="200px">
-                <el-form-item label="案例编号" prop="book_id">
-                    <el-select v-model="math.book_id" placeholder="请选择">
-                        <el-option
-                                v-for="id in ids"
-                                :key="id"
-                                :label="id"
-                                :value="id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="答案" prop="answers">
-                    <el-upload
-                            ref="answer"
-                            list-type="picture-card"
-                            action="/upload"
-                            name="img"
-                            accept="image/*"
-                            :on-success="uploadAnswerSuccess"
-                            :headers="{'X-XSRF-TOKEN':csrfToken}">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="情境" prop="scene">
-                    <el-cascader v-model="math.scene" :options="sceneOptions"></el-cascader>
-                </el-form-item>
-                <el-form-item label="PISA能力等级-沟通" prop="communication">
-                    <el-select v-model="math.communication" placeholder="沟通">
-                        <el-option v-for="item in pisa['communication']"
-                                   :label="item['label']"
-                                   :value="item['value']">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="PISA能力等级-策略" prop="strategy">
-                    <el-select v-model="math.strategy" placeholder="策略">
-                        <el-option v-for="item in pisa['strategy']"
-                                   :label="item['label']"
-                                   :value="item['value']">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="PISA能力等级-数学化" prop="mathematicization">
-                    <el-select v-model="math.mathematicization" placeholder="数学化">
-                        <el-option v-for="item in pisa['mathematicization']"
-                                   :label="item['label']"
-                                   :value="item['value']">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="PISA能力等级-符号" prop="symbol">
-                    <el-select v-model="math.symbol" placeholder="符号">
-                        <el-option v-for="item in pisa['symbol']"
-                                   :label="item['label']"
-                                   :value="item['value']">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="PISA能力等级-表征" prop="representation">
-                    <el-select v-model="math.representation" placeholder="表征">
-                        <el-option v-for="item in pisa['representation']"
-                                   :label="item['label']"
-                                   :value="item['value']">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="PISA能力等级-推理论证" prop="reasoning">
-                    <el-select v-model="math.reasoning" placeholder="推理论证">
-                        <el-option v-for="item in pisa['reasoning']"
-                                   :label="item['label']"
-                                   :value="item['value']">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="知识情景/场景" prop="knowledge">
-                    <el-select v-model="math.knowledge" placeholder="请选择">
-                        <el-option
-                                v-for="knowledge in knowledges"
-                                :key="knowledge"
-                                :label="knowledge"
-                                :value="knowledge">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="知识点" prop="point">
-                    <el-cascader v-model="math.point" :options="pointOptions" :props={multiple:true}></el-cascader>
-                </el-form-item>
-            </el-form>
+            <el-row>
+                <el-col :span="12">
+                    <div>{{book.topic}}</div>
+                    <div v-for="legend in book.legends">
+                        <el-image fit="contain" :src="legend"></el-image>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <el-form :model="math" :rules="rule" ref="form" label-width="200px">
+                        <el-form-item label="案例编号" prop="book_id">
+                            <el-select v-model="math.book_id" placeholder="请选择" @change="getBook">
+                                <el-option
+                                        v-for="id in ids"
+                                        :key="id"
+                                        :label="id"
+                                        :value="id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="答案" prop="answers">
+                            <el-upload
+                                    ref="answer"
+                                    list-type="picture-card"
+                                    action="/upload"
+                                    name="img"
+                                    accept="image/*"
+                                    :on-success="uploadAnswerSuccess"
+                                    :headers="{'X-XSRF-TOKEN':csrfToken}">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                        </el-form-item>
+                        <el-form-item label="情境" prop="scene">
+                            <el-cascader v-model="math.scene" :options="sceneOptions"></el-cascader>
+                        </el-form-item>
+                        <el-form-item label="PISA能力等级-沟通" prop="communication">
+                            <el-select v-model="math.communication" placeholder="沟通">
+                                <el-option v-for="item in pisa['communication']"
+                                           :label="item['label']"
+                                           :value="item['value']">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="PISA能力等级-策略" prop="strategy">
+                            <el-select v-model="math.strategy" placeholder="策略">
+                                <el-option v-for="item in pisa['strategy']"
+                                           :label="item['label']"
+                                           :value="item['value']">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="PISA能力等级-数学化" prop="mathematicization">
+                            <el-select v-model="math.mathematicization" placeholder="数学化">
+                                <el-option v-for="item in pisa['mathematicization']"
+                                           :label="item['label']"
+                                           :value="item['value']">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="PISA能力等级-符号" prop="symbol">
+                            <el-select v-model="math.symbol" placeholder="符号">
+                                <el-option v-for="item in pisa['symbol']"
+                                           :label="item['label']"
+                                           :value="item['value']">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="PISA能力等级-表征" prop="representation">
+                            <el-select v-model="math.representation" placeholder="表征">
+                                <el-option v-for="item in pisa['representation']"
+                                           :label="item['label']"
+                                           :value="item['value']">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="PISA能力等级-推理论证" prop="reasoning">
+                            <el-select v-model="math.reasoning" placeholder="推理论证">
+                                <el-option v-for="item in pisa['reasoning']"
+                                           :label="item['label']"
+                                           :value="item['value']">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="知识情景/场景" prop="knowledge">
+                            <el-select v-model="math.knowledge" placeholder="请选择">
+                                <el-option
+                                        v-for="knowledge in knowledges"
+                                        :key="knowledge"
+                                        :label="knowledge"
+                                        :value="knowledge">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="知识点" prop="point">
+                            <el-cascader v-model="math.point" :options="pointOptions"
+                                         :props={multiple:true}></el-cascader>
+                        </el-form-item>
+                    </el-form>
+                </el-col>
+            </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="create">确 定</el-button>
             </div>
@@ -193,6 +212,7 @@
                     point: '',
                     start: '',
                 },
+                book: {},
                 maths: [],
                 sceneOptions: [],
                 pisa: [],
@@ -274,8 +294,23 @@
             uploadAnswerSuccess(response, file, fileList) {
                 this.math.answers.push(response.path);
             },
-            showImg(answer) {
-
+            getBook(id) {
+                axios.get('/books/' + id)
+                    .then(response => {
+                        this.book = response.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            },
+            del(index, row) {
+                axios.delete('/mathmarks/' + row.id)
+                    .then(response => {
+                        this.getMaths();
+                    })
+                    .catch(error => {
+                        this.$message.error('没有权限');
+                    })
             }
         },
         mounted() {

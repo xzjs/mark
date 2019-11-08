@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class MathMarkController extends Controller
 {
+//    public function __construct()
+//    {
+//        parent::__construct();
+//        $this->authorizeResource(MathMark::class);
+//    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,10 +22,10 @@ class MathMarkController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->type === 0) {
+        if ($user->isAdmin()) {
             $mathMarks = MathMark::with('user:id,name')->get()->toArray();
         } else {
-            $mathMarks = MathMark::with('user:id,name')->whereIn('id', [1, $user->id])->get()->toArray();
+            $mathMarks = MathMark::with('user:id,name')->whereIn('user_id', [1, $user->id])->get()->toArray();
         }
         foreach ($mathMarks as &$mathMark) {
             $mathMark['answers'] = array_map([$this, 'appendHost'], json_decode($mathMark['answers']));
@@ -121,9 +127,13 @@ class MathMarkController extends Controller
      *
      * @param int $id
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($id)
     {
-        //
+        $mathMark = MathMark::find($id);
+        $this->authorize('delete', $mathMark);
+        MathMark::destroy($id);
+        return response('success');
     }
 }

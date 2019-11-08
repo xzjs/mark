@@ -60,7 +60,9 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        //
+        $book = Book::find($id);
+        $book->legends = array_map([$this, 'appendHost'], json_decode($book->legends));
+        return response()->json($book);
     }
 
     /**
@@ -95,6 +97,6 @@ class BookController extends Controller
     public function destroy($id)
     {
         Book::destroy($id);
-        return response();
+        return response('success');
     }
 }

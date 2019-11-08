@@ -12,8 +12,7 @@
             </el-table-column>
             <el-table-column
                     prop="topic"
-                    label="题目"
-                    width="180px">
+                    label="题目">
             </el-table-column>
             <el-table-column
                     prop="legends"
@@ -25,11 +24,12 @@
                 </template>
             </el-table-column>
             <el-table-column
+                    v-if="user.type===0"
                     fixed="right"
                     label="操作"
                     width="100">
                 <template slot-scope="scope">
-                    <el-button @click="delete(scope.row.id)" type="text" size="small">删除</el-button>
+                    <el-button @click="del(scope.$index, scope.row)" type="danger" size="small">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -54,7 +54,7 @@
                             action="/upload"
                             name="img"
                             accept="image/*"
-                            :on-success="uploadLegendSuccess"
+                            :file-list="book.legends"
                             :headers="{'X-XSRF-TOKEN':csrfToken}">
                         <i class="el-icon-plus"></i>
                     </el-upload>
@@ -80,7 +80,6 @@
                 book: {
                     topic: '',
                     legends: [],
-                    answers: [],
                 },
                 books: [],
                 dialogVisible: false,
@@ -91,12 +90,6 @@
             }
         },
         methods: {
-            uploadLegendSuccess(response, file, fileList) {
-                this.book.legends.push(response.path);
-            },
-            uploadAnswerSuccess(response, file, fileList) {
-                this.book.answers.push(response.path);
-            },
             handleClose(done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
@@ -115,6 +108,7 @@
                                 this.getBooks();
                                 this.$refs.form.resetFields();
                                 this.$refs.legend.clearFiles();
+                                this.book.legends = [];
                                 this.dialogVisible = false;
                             })
                             .catch((error) => {
@@ -135,8 +129,8 @@
                         console.log(error);
                     })
             },
-            delete(id) {
-                axios.delete('books/' + id)
+            del(index, row) {
+                axios.delete('/books/' + row.id)
                     .then(response => {
                         this.getBooks();
                     })
@@ -144,6 +138,14 @@
                         console.log(error);
                     })
 
+            },
+            edit(index, row) {
+                this.book = row;
+                let fileList = [];
+                for (let i = 0; i < row.legends.length; i++) {
+                    fileList.push({'url': row.legends[i]})
+                }
+                this.dialogVisible = true;
             }
         },
         mounted() {
