@@ -6,6 +6,7 @@ use App\Book;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class BookController extends Controller
 {
@@ -42,6 +43,11 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+        Log::notice('store book', [
+            'request' => $request->all(),
+            'user' => Auth::user(),
+            'ip' => $request->getClientIp(),
+        ]);
         $request->validate([
             'topic' => 'required|max:255',
         ]);

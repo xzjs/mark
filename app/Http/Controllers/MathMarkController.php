@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\MathMark;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MathMarkController extends Controller
 {
@@ -54,6 +55,11 @@ class MathMarkController extends Controller
      */
     public function store(Request $request)
     {
+        Log::notice('store mathmark', [
+            'request' => $request->all(),
+            'user' => Auth::user(),
+            'ip' => $request->getClientIp()
+        ]);
         $request->validate([
             'book_id' => 'required|integer',
             'answers' => 'required|array',

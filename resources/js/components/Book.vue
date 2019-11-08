@@ -54,7 +54,7 @@
                             action="/upload"
                             name="img"
                             accept="image/*"
-                            :file-list="book.legends"
+                            :on-success="uploadLegendSuccess"
                             :headers="{'X-XSRF-TOKEN':csrfToken}">
                         <i class="el-icon-plus"></i>
                     </el-upload>
@@ -90,6 +90,9 @@
             }
         },
         methods: {
+            uploadLegendSuccess(response, file, fileList) {
+                this.book.legends.push(response.path);
+            },
             handleClose(done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
