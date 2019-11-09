@@ -8,10 +8,10 @@
                     text-color="#fff"
                     :router=true
                     active-text-color="#ffd04b">
-                <el-menu-item index="book">案例</el-menu-item>
+                <el-menu-item index="/book">案例</el-menu-item>
                 <el-submenu index="#">
                     <template slot="title">标注</template>
-                    <el-menu-item v-if="user.type === 0 || user.type === 1" index="math">数学</el-menu-item>
+                    <el-menu-item v-if="user.type === 0 || user.type === 1" index="/math">数学</el-menu-item>
                     <el-menu-item v-if="user.type === 0 || user.type === 2" index="2-2">计算机/AI</el-menu-item>
                     <el-menu-item v-if="user.type === 0 || user.type === 3" index="2-3">批判性思维</el-menu-item>
                 </el-submenu>
@@ -35,7 +35,13 @@
         },
         data() {
             return {
-                activeIndex: "book",
+                activeIndex: "/book",
+            }
+        },
+        mounted() {
+            let path = this.$route.path;
+            if (path !== '/') {
+                this.activeIndex = path;
             }
         }
     }

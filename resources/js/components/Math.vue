@@ -283,6 +283,7 @@
                 this.$confirm('确认关闭？')
                     .then(_ => {
                         this.math = {};
+                        this.book = {};
                         this.$refs.answer.clearFiles();
                         done();
                     })

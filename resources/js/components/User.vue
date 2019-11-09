@@ -100,6 +100,9 @@
             },
         },
         mounted() {
+            if (this.user.type !== 0) {
+                this.$router.push('/');
+            }
             this.getUsers();
         }
     }
