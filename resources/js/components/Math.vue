@@ -21,7 +21,7 @@
                 <template slot-scope="scope">
                     <div v-for="answer in scope.row.answers">
                         <el-image :src="answer.url+'-small'" fit="contain"
-                                  :preview-src-list="scope.row.answers"></el-image>
+                                  :preview-src-list="getImgList(scope.row.answers)"></el-image>
                     </div>
                 </template>
             </el-table-column>
@@ -82,6 +82,14 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div class="pagination">
+            <el-pagination background layout="prev, pager, next" :total="total"
+                           :page-size="10"
+                           @current-change="currentChange"
+                           @prev-click="currentChange"
+                           @next-click="nextClick"
+            ></el-pagination>
+        </div>
         <el-dialog
                 title="标注"
                 :visible.sync="dialogVisible"
@@ -203,6 +211,7 @@
         name: "Math",
         data() {
             return {
+                total: 0,
                 ids: [],
                 math: {
                     book_id: '',
@@ -242,24 +251,25 @@
             }
         },
         computed: {
-            ...mapState(['user'])
+            ...mapState(['user']),
         },
         methods: {
             showDialog() {
                 this.dialogVisible = true;
                 this.math.start = (new Date()).getTime();
             },
-            getMaths: function () {
-                axios.get('mathmarks')
+            getMaths: function (params) {
+                axios.get('mathmarks', {params: params})
                     .then(response => {
-                        this.maths = response.data;
+                        this.maths = response.data.data;
+                        this.total = response.data.total;
                     })
                     .catch(error => {
                         console.log(error);
                     })
             },
             getIds: function () {
-                axios.get('/books')
+                axios.get('/books', {params: {field: 'id'}})
                     .then((response) => {
                         for (let i = 0; i < response.data.length; i++) {
                             this.ids.push(response.data[i].id);
@@ -306,8 +316,10 @@
             },
             refresh() {
                 this.getMaths();
+                this.math = {};
                 this.$refs.form.resetFields();
                 this.dialogVisible = false;
+                this.book = {};
             },
             uploadAnswerSuccess(response, file, fileList) {
                 this.math.answers = fileList;
@@ -337,6 +349,22 @@
                 this.math = row;
                 this.getBook(row.book_id);
                 this.showDialog();
+            },
+            getImgList(imgs) {
+                let list = [];
+                for (let i = 0; i < imgs.length; i++) {
+                    list.push(imgs[i].url);
+                }
+                return list;
+            },
+            currentChange(page) {
+                this.getMaths({'page': page});
+            },
+            preCLick(page) {
+                this.getMaths({'page': page - 1});
+            },
+            nextClick(page) {
+                this.getMaths({'page': page + 1});
             }
         },
         mounted() {
@@ -377,5 +405,8 @@
 </script>
 
 <style scoped>
-
+    .pagination {
+        text-align: center;
+        margin: 20px;
+    }
 </style>

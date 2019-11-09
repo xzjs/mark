@@ -18,11 +18,11 @@ class MathMarkController extends Controller
     {
         $user = Auth::user();
         if ($user->isAdmin()) {
-            $mathMarks = MathMark::with('user:id,name')->get()->toArray();
+            $mathMarks = MathMark::with('user:id,name')->paginate(10)->toArray();
         } else {
-            $mathMarks = MathMark::with('user:id,name')->whereIn('user_id', [1, $user->id])->get()->toArray();
+            $mathMarks = MathMark::with('user:id,name')->whereIn('user_id', [1, $user->id])->paginate(10)->toArray();
         }
-        foreach ($mathMarks as &$mathMark) {
+        foreach ($mathMarks['data'] as &$mathMark) {
             $mathMark['answers'] = array_map([$this, 'appendHost'], json_decode($mathMark['answers']));
             $mathMark['scene'] = json_decode($mathMark['scene']);
             $mathMark['point'] = json_decode($mathMark['point']);

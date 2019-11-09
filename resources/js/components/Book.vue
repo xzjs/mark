@@ -33,6 +33,14 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div class="pagination">
+            <el-pagination background layout="prev, pager, next" :total="total"
+                           :page-size="10"
+                           @current-change="currentChange"
+                           @prev-click="currentChange"
+                           @next-click="nextClick"
+            ></el-pagination>
+        </div>
         <el-dialog
                 title="添加案例"
                 :visible.sync="dialogVisible"
@@ -80,6 +88,7 @@
         },
         data() {
             return {
+                total: 0,
                 book: {
                     topic: '',
                     legends: [],
@@ -141,10 +150,11 @@
                 this.book.legends = [];
                 this.dialogVisible = false;
             },
-            getBooks() {
-                axios.get('books')
+            getBooks(params) {
+                axios.get('books', {params: params})
                     .then((response) => {
-                        this.books = response.data;
+                        this.books = response.data.data;
+                        this.total = response.data.total;
                     })
                     .catch((error) => {
                         console.log(error);
@@ -163,6 +173,17 @@
             edit(index, row) {
                 this.book = row;
                 this.dialogVisible = true;
+            },
+            currentChange(page) {
+                this.getBooks({'page': page});
+            },
+            preCLick(page) {
+                if (page > 1) {
+                    this.getBools({'page': page - 1});
+                }
+            },
+            nextClick(page) {
+                this.getBooks({'page': page + 1});
             }
         },
         mounted() {
@@ -172,5 +193,8 @@
 </script>
 
 <style scoped>
-
+    .pagination {
+        text-align: center;
+        margin: 20px;
+    }
 </style>
