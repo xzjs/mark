@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class MathMarkController extends Controller
 {
-//    public function __construct()
-//    {
-//        parent::__construct();
-//        $this->authorizeResource(MathMark::class);
-//    }
-
     /**
      * Display a listing of the resource.
      *
@@ -122,6 +116,7 @@ class MathMarkController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param int $id
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, $id)
     {
@@ -130,6 +125,8 @@ class MathMarkController extends Controller
             'user' => Auth::user(),
             'ip' => $request->getClientIp()
         ]);
+        $mathMark = MathMark::find($id);
+        $this->authorize('delete', $mathMark);
         $request->validate([
             'book_id' => 'required|integer',
             'answers' => 'required|array',
@@ -145,7 +142,6 @@ class MathMarkController extends Controller
             'start' => 'required',
         ]);
 
-        $mathMark = MathMark::find($id);
         $mathMark->book_id = $request->book_id;
         $mathMark->answers = json_encode($request->answers);
         $mathMark->scene = json_encode($request->scene);

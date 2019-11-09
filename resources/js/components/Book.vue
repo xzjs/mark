@@ -18,9 +18,7 @@
                     prop="legends"
                     label="图例">
                 <template slot-scope="scope">
-                    <div v-for="legend in scope.row.legends">
-                        <el-image :src="legend.url" fit="contain"></el-image>
-                    </div>
+                    <el-image v-for="legend in scope.row.legends" :src="legend.url+'-small'" fit="contain"></el-image>
                 </template>
             </el-table-column>
             <el-table-column

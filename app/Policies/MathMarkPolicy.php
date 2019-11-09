@@ -42,7 +42,7 @@ class MathMarkPolicy
      */
     public function update(User $user, MathMark $mathMark)
     {
-        //
+        return $mathMark->user_id == $user->id;
     }
 
     /**
