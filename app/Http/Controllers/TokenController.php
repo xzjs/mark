@@ -17,6 +17,7 @@ class TokenController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             $data = [
+                'id' => $user->id,
                 'name' => $user->name,
                 'type' => $user->type,
             ];

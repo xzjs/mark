@@ -346,9 +346,13 @@
                     })
             },
             edit(index, row) {
-                this.math = row;
-                this.getBook(row.book_id);
-                this.showDialog();
+                if (row.user_id == this.user.id || this.user.type === 0) {
+                    this.math = row;
+                    this.getBook(row.book_id);
+                    this.showDialog();
+                } else {
+                    this.$message.error('只能编辑自己的标注');
+                }
             },
             getImgList(imgs) {
                 let list = [];
