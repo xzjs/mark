@@ -20,7 +20,8 @@
                     label="答案">
                 <template slot-scope="scope">
                     <div v-for="answer in scope.row.answers">
-                        <el-image :src="answer+'-small'" fit="contain" :preview-src-list="scope.row.answers"></el-image>
+                        <el-image :src="answer.url+'-small'" fit="contain"
+                                  :preview-src-list="scope.row.answers"></el-image>
                     </div>
                 </template>
             </el-table-column>
@@ -75,6 +76,8 @@
                     label="操作"
                     width="100">
                 <template slot-scope="scope">
+                    <el-button @click="edit(scope.$index, scope.row)" size="small">编辑</el-button>
+                    <br>
                     <el-button @click="del(scope.$index, scope.row)" type="danger" size="small">删除</el-button>
                 </template>
             </el-table-column>
@@ -88,7 +91,7 @@
                 <el-col :span="12">
                     <div>{{book.topic}}</div>
                     <div v-for="legend in book.legends">
-                        <el-image fit="contain" :src="legend"></el-image>
+                        <el-image fit="contain" :src="legend.url"></el-image>
                     </div>
                 </el-col>
                 <el-col :span="12">
@@ -110,7 +113,10 @@
                                     action="/upload"
                                     name="img"
                                     accept="image/*"
+                                    :limit=10
+                                    :file-list="math.answers"
                                     :on-success="uploadAnswerSuccess"
+                                    :on-remove="deleteAnswerSuccess"
                                     :headers="{'X-XSRF-TOKEN':csrfToken}">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
@@ -276,23 +282,38 @@
             create() {
                 this.$refs['form'].validate((valid) => {
                     if (valid) {
-                        axios.post('/mathmarks', this.math)
-                            .then((response) => {
-                                this.getMaths();
-                                this.$refs.form.resetFields();
-                                this.dialogVisible = false;
-                            })
-                            .catch((error) => {
-                                console.log(error.response);
-                                this.$message.error(error.response.data);
-                            })
+                        if (this.math.id) {
+                            axios.put('/mathmarks/' + this.math.id, this.math)
+                                .then(response => {
+                                    this.refresh();
+                                })
+                                .catch(error => {
+                                    this.$message.error(error.response.data);
+                                })
+                        } else {
+                            axios.post('/mathmarks', this.math)
+                                .then((response) => {
+                                    this.refresh();
+                                })
+                                .catch((error) => {
+                                    this.$message.error(error.response.data);
+                                })
+                        }
                     } else {
                         return false;
                     }
                 });
             },
+            refresh() {
+                this.getMaths();
+                this.$refs.form.resetFields();
+                this.dialogVisible = false;
+            },
             uploadAnswerSuccess(response, file, fileList) {
-                this.math.answers.push(response.path);
+                this.math.answers = fileList;
+            },
+            deleteAnswerSuccess(file, fileList) {
+                this.math.answers = fileList;
             },
             getBook(id) {
                 axios.get('/books/' + id)
@@ -311,6 +332,11 @@
                     .catch(error => {
                         this.$message.error('没有权限');
                     })
+            },
+            edit(index, row) {
+                this.math = row;
+                this.getBook(row.book_id);
+                this.showDialog();
             }
         },
         mounted() {

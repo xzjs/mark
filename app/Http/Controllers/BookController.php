@@ -91,7 +91,19 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Log::notice('update book', [
+            'request' => $request->all(),
+            'user' => Auth::user(),
+            'ip' => $request->getClientIp(),
+        ]);
+        $request->validate([
+            'topic' => 'required|max:255',
+        ]);
+        $book = Book::find($id);
+        $book->topic = $request->topic;
+        $book->legends = json_encode($request->legends);
+        $book->saveOrFail();
+        return response('success');
     }
 
     /**

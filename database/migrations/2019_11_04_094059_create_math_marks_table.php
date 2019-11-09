@@ -16,7 +16,7 @@ class CreateMathMarksTable extends Migration
         Schema::create('math_marks', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('book_id');
-            $table->string('answers');
+            $table->text('answers');
             $table->string('scene')->comment('情景');
             $table->integer('communication')->comment('沟通');
             $table->integer('strategy')->comment('策略');

@@ -19,7 +19,7 @@
                     label="图例">
                 <template slot-scope="scope">
                     <div v-for="legend in scope.row.legends">
-                        <el-image :src="legend" fit="contain"></el-image>
+                        <el-image :src="legend.url" fit="contain"></el-image>
                     </div>
                 </template>
             </el-table-column>
@@ -29,6 +29,8 @@
                     label="操作"
                     width="100">
                 <template slot-scope="scope">
+                    <el-button @click="edit(scope.$index, scope.row)" size="small">修改</el-button>
+                    <br>
                     <el-button @click="del(scope.$index, scope.row)" type="danger" size="small">删除</el-button>
                 </template>
             </el-table-column>
@@ -54,7 +56,10 @@
                             action="/upload"
                             name="img"
                             accept="image/*"
+                            :limit=10
+                            :file-list="book.legends"
                             :on-success="uploadLegendSuccess"
+                            :on-remove="deleteLegendSuccess"
                             :headers="{'X-XSRF-TOKEN':csrfToken}">
                         <i class="el-icon-plus"></i>
                     </el-upload>
@@ -85,13 +90,16 @@
                 dialogVisible: false,
                 csrfToken: this.$cookies.get('XSRF-TOKEN'),
                 rule: {
-                    topic: [{required: true, message: '请输入书名', trigger: 'blur'}],
+                    topic: [{required: true, message: '请输入案例题目', trigger: 'blur'}],
                 }
             }
         },
         methods: {
             uploadLegendSuccess(response, file, fileList) {
-                this.book.legends.push(response.path);
+                this.book.legends = fileList;
+            },
+            deleteLegendSuccess(file, fileList) {
+                this.book.legends = fileList;
             },
             handleClose(done) {
                 this.$confirm('确认关闭？')
@@ -106,22 +114,34 @@
             create() {
                 this.$refs['form'].validate((valid) => {
                     if (valid) {
-                        axios.post('/books', this.book)
-                            .then((response) => {
-                                this.getBooks();
-                                this.$refs.form.resetFields();
-                                this.$refs.legend.clearFiles();
-                                this.book.legends = [];
-                                this.dialogVisible = false;
-                            })
-                            .catch((error) => {
-                                console.log(error.response);
-                                this.$message.error(error.response.data);
-                            })
+                        if (this.book.id) {
+                            axios.put('/books/' + this.book.id, this.book)
+                                .then(response => {
+                                    this.refresh();
+                                })
+                                .catch(error => {
+                                    this.$message.error(error.response.data);
+                                })
+                        } else {
+                            axios.post('/books', this.book)
+                                .then(response => {
+                                    this.refresh();
+                                })
+                                .catch((error) => {
+                                    this.$message.error(error.response.data);
+                                })
+                        }
                     } else {
                         return false;
                     }
                 });
+            },
+            refresh() {
+                this.getBooks();
+                this.$refs.form.resetFields();
+                this.$refs.legend.clearFiles();
+                this.book.legends = [];
+                this.dialogVisible = false;
             },
             getBooks() {
                 axios.get('books')
@@ -144,10 +164,6 @@
             },
             edit(index, row) {
                 this.book = row;
-                let fileList = [];
-                for (let i = 0; i < row.legends.length; i++) {
-                    fileList.push({'url': row.legends[i]})
-                }
                 this.dialogVisible = true;
             }
         },

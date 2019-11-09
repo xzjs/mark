@@ -125,7 +125,43 @@ class MathMarkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Log::notice('update mathmark', [
+            'request' => $request->all(),
+            'user' => Auth::user(),
+            'ip' => $request->getClientIp()
+        ]);
+        $request->validate([
+            'book_id' => 'required|integer',
+            'answers' => 'required|array',
+            'scene' => 'required|array',
+            'communication' => 'required',
+            'strategy' => 'required',
+            'mathematicization' => 'required',
+            'symbol' => 'required',
+            'representation' => 'required',
+            'reasoning' => 'required',
+            'knowledge' => 'required',
+            'point' => 'required|array',
+            'start' => 'required',
+        ]);
+
+        $mathMark = MathMark::find($id);
+        $mathMark->book_id = $request->book_id;
+        $mathMark->answers = json_encode($request->answers);
+        $mathMark->scene = json_encode($request->scene);
+        $mathMark->communication = $request->communication;
+        $mathMark->strategy = $request->strategy;
+        $mathMark->mathematicization = $request->mathematicization;
+        $mathMark->symbol = $request->symbol;
+        $mathMark->representation = $request->representation;
+        $mathMark->reasoning = $request->reasoning;
+        $mathMark->knowledge = $request->knowledge;
+        $mathMark->point = json_encode($request->point);
+        $mathMark->cost += (time() - $request->start / 1000);
+        $mathMark->user_id = Auth::user()->id;
+
+        $mathMark->saveOrFail();
+        return response('success');
     }
 
     /**

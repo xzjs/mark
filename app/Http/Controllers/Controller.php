@@ -24,7 +24,8 @@ class Controller extends BaseController
      */
     protected function appendHost($img)
     {
-        return $this->host . $img;
+        $img->url = $this->host . $img->response->path;
+        return $img;
     }
 
 
