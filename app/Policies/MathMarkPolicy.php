@@ -83,7 +83,7 @@ class MathMarkPolicy
 
     public function before(User $user)
     {
-        if ($user->isAdmin()) {
+        if ($user->hasRole('管理员')) {
             return true;
         }
     }

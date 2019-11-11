@@ -17,7 +17,6 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('password');
-            $table->smallInteger('type')->comment('类型');
             $table->timestamps();
         });
     }

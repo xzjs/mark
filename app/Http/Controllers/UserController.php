@@ -17,9 +17,17 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->isAdmin()) {
-            $users = User::all()->toArray();
-            return response()->json($users);
+        if ($user->can('user')) {
+            $users = User::all();
+            $data = [];
+            foreach ($users as $user) {
+                $data[] = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'roles' => $user->getRoleNames(),
+                ];
+            }
+            return response()->json($data);
         } else {
             return response('权限不足', 403);
         }
@@ -46,15 +54,18 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|max:255|unique:users',
+            'roles' => 'required|array',
         ]);
         $user = Auth::user();
-        if ($user->isAdmin()) {
+        if ($user->can('user')) {
             $userModel = new User();
             $userModel->name = $request->name;
             $userModel->password = bcrypt('111111');
-            $userModel->type = 1;
             $userModel->saveOrFail();
-            return response($userModel->id);
+            foreach ($request->roles as $role) {
+                $userModel->assignRole($role);
+            }
+            return response('success');
         } else {
             return response("权限不足", 403);
         }

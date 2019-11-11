@@ -18,12 +18,16 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->field) {
-            $books = Book::select($request->field)->get()->toArray();
-        } else {
-            $books = Book::paginate(10)->toArray();
-            foreach ($books['data'] as &$book) {
-                $book['legends'] = array_map([$this, 'appendHost'], json_decode($book['legends']));
+        $user = Auth::user();
+        $books = [];
+        if ($user->can('book.read')) {
+            if ($request->field) {
+                $books = Book::select($request->field)->get()->toArray();
+            } else {
+                $books = Book::paginate(10)->toArray();
+                foreach ($books['data'] as &$book) {
+                    $book['legends'] = array_map([$this, 'appendHost'], json_decode($book['legends']));
+                }
             }
         }
         return response()->json($books);
@@ -56,11 +60,15 @@ class BookController extends Controller
         $request->validate([
             'topic' => 'required|max:255',
         ]);
-        $book = new Book();
-        $book->topic = $request->input('topic');
-        $book->legends = json_encode($request->input('legends'));
-        $book->saveOrFail();
-        return response()->json($book->id);
+        $user = Auth::user();
+        if ($user->can('book.write')) {
+            $book = new Book();
+            $book->topic = $request->input('topic');
+            $book->legends = json_encode($request->input('legends'));
+            $book->saveOrFail();
+            return response('success');
+        }
+        return response('没有权限', 403);
     }
 
     /**

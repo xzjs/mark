@@ -1,6 +1,8 @@
 <template>
     <div>
-        <el-button v-if="user.type === 0" type="primary" icon="el-icon-edit" @click="dialogVisible=true">添加</el-button>
+        <el-button v-if="user.permissions.indexOf('book.write')!==-1" type="primary" icon="el-icon-edit"
+                   @click="dialogVisible=true">添加
+        </el-button>
         <el-table
                 border
                 :data="books"
@@ -22,7 +24,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    v-if="user.type===0"
+                    v-if="user.permissions.indexOf('book.write')!==-1"
                     fixed="right"
                     label="操作"
                     width="100">
@@ -145,6 +147,7 @@
             },
             refresh() {
                 this.getBooks();
+                this.book = {};
                 this.$refs.form.resetFields();
                 this.$refs.legend.clearFiles();
                 this.book.legends = [];

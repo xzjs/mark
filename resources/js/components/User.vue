@@ -12,8 +12,11 @@
             </el-table-column>
             <el-table-column
                     prop="type"
-                    label="标注类型"
+                    label="角色"
                     align="center">
+                <template slot-scope="scope">
+                    <el-tag v-for="role in scope.row.roles">{{role}}</el-tag>
+                </template>
             </el-table-column>
         </el-table>
         <el-dialog
@@ -21,16 +24,17 @@
                 :visible.sync="dialogVisible"
                 width="80%"
                 :before-close="handleClose">
-            <el-form :model="user" :rules="rule" ref="form">
+            <el-form :model="u" :rules="rule" ref="form">
                 <el-form-item label="用户名" prop="name">
-                    <el-input v-model="user.name" autocomplete="off"></el-input>
+                    <el-input v-model="u.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="标注类型" prop="type">
-                    <el-select v-model="user.type">
-                        <el-option label="数学" value="1"></el-option>
-                        <el-option label="计算机" value="2"></el-option>
-                        <el-option label="批判性思维" value="3"></el-option>
-                    </el-select>
+                <el-form-item label="角色" prop="roles">
+                    <el-checkbox-group v-model="u.roles">
+                        <el-checkbox label="标记数学"></el-checkbox>
+                        <el-checkbox label="标记计算机"></el-checkbox>
+                        <el-checkbox label="标记批判性思维"></el-checkbox>
+                        <el-checkbox label="上传案例"></el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="密码">
                     初始密码为111111
@@ -45,27 +49,32 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
+
     export default {
         name: "User",
         data() {
             return {
-                user: {
+                u: {
                     name: "",
-                    type: '',
+                    roles: [],
                 },
                 users: [],
                 dialogVisible: false,
                 rule: {
                     name: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-                    type: [{required: true, message: '请选择标注类型', trigger: 'blur'}],
+                    roles: [{required: true, message: '请至少选择一个权限', trigger: 'blur'}],
                 }
             }
+        },
+        computed: {
+            ...mapState(['user'])
         },
         methods: {
             handleClose(done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
-                        this.user = {};
+                        this.u = {};
                         done();
                     })
                     .catch(_ => {
@@ -74,7 +83,7 @@
             create() {
                 this.$refs['form'].validate((valid) => {
                     if (valid) {
-                        axios.post('/users', this.user)
+                        axios.post('/users', this.u)
                             .then((response) => {
                                 this.getUsers();
                                 this.$refs.form.resetFields();
@@ -100,7 +109,7 @@
             },
         },
         mounted() {
-            if (this.user.type !== 0) {
+            if (this.user.permissions.indexOf('user') === -1) {
                 this.$router.push('/');
             }
             this.getUsers();

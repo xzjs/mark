@@ -19,7 +19,7 @@ class TokenController extends Controller
             $data = [
                 'id' => $user->id,
                 'name' => $user->name,
-                'type' => $user->type,
+                'permissions' => $user->getAllPermissions()->pluck('name'),
             ];
             return response()->json($data);
         } else {
@@ -54,8 +54,9 @@ class TokenController extends Controller
             $user = Auth::user();
             $request->session()->put('id', $user->id);
             $data = [
+                'id' => $user->id,
                 'name' => $user->name,
-                'type' => $user->type,
+                'permissions' => $user->getAllPermissions()->pluck('name'),
             ];
             return response()->json($data);
         } else {

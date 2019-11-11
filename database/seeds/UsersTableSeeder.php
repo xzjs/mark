@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +16,8 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'admin',
             'password' => bcrypt('admin@123'),
-            'type' => 0
         ]);
+        $user = User::first();
+        $user->assignRole('管理员');
     }
 }

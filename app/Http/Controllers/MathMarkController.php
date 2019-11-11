@@ -17,7 +17,7 @@ class MathMarkController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->isAdmin()) {
+        if ($user->hasRole('管理员')) {//是管理员
             $mathMarks = MathMark::with('user:id,name')->paginate(10)->toArray();
         } else {
             $mathMarks = MathMark::with('user:id,name')->whereIn('user_id', [1, $user->id])->paginate(10)->toArray();
@@ -54,6 +54,12 @@ class MathMarkController extends Controller
             'user' => Auth::user(),
             'ip' => $request->getClientIp()
         ]);
+
+        $user = Auth::user();
+        if (!$user->can('mark.math')) {
+            return response('没有权限', 403);
+        }
+
         $request->validate([
             'book_id' => 'required|integer',
             'answers' => 'required|array',
