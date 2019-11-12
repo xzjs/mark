@@ -58,7 +58,7 @@ class BookController extends Controller
             'ip' => $request->getClientIp(),
         ]);
         $request->validate([
-            'topic' => 'required|max:255',
+            'topic' => 'required',
         ]);
         $user = Auth::user();
         if ($user->can('book.write')) {
@@ -110,7 +110,7 @@ class BookController extends Controller
             'ip' => $request->getClientIp(),
         ]);
         $request->validate([
-            'topic' => 'required|max:255',
+            'topic' => 'required',
         ]);
         $book = Book::find($id);
         $book->topic = $request->topic;
