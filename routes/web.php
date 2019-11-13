@@ -24,5 +24,6 @@ Route::middleware(['auth'])->group(function () {
         'books' => 'BookController',
         'users' => 'UserController',
         'mathmarks' => 'MathMarkController',
+        'computers' => 'ComputerController',
     ]);
 });

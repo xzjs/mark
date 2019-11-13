@@ -63,7 +63,7 @@
                             list-type="picture-card"
                             action="/upload"
                             name="img"
-                            accept="image/*"
+                            accept="image/jpeg,image/png"
                             :limit=10
                             :file-list="book.legends"
                             :on-success="uploadLegendSuccess"

@@ -10,7 +10,7 @@
                     active-text-color="#ffd04b">
                 <el-menu-item v-if="user.permissions.indexOf('book.read')!==-1" index="/book">案例</el-menu-item>
                 <el-menu-item v-if="user.permissions.indexOf('mark.math')!==-1" index="/math">数学</el-menu-item>
-                <el-menu-item v-if="user.permissions.indexOf('mark.cs')!==-1" index="2-2">计算机/AI</el-menu-item>
+                <el-menu-item v-if="user.permissions.indexOf('mark.cs')!==-1" index="/computer">计算机/AI</el-menu-item>
                 <el-menu-item v-if="user.permissions.indexOf('mark.cr')!==-1" index="2-3">批判性思维</el-menu-item>
                 <el-menu-item index="user" v-if="user.permissions.indexOf('user')!==-1">用户管理</el-menu-item>
                 <el-menu-item class="username" index="password">修改密码</el-menu-item>

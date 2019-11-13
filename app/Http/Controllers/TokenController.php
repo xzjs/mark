@@ -20,6 +20,7 @@ class TokenController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'permissions' => $user->getAllPermissions()->pluck('name'),
+                'roles' => $user->getRoleNames(),
             ];
             return response()->json($data);
         } else {

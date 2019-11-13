@@ -160,7 +160,6 @@ class MathMarkController extends Controller
         $mathMark->knowledge = $request->knowledge;
         $mathMark->point = json_encode($request->point);
         $mathMark->cost += (time() - $request->start / 1000);
-        $mathMark->user_id = Auth::user()->id;
 
         $mathMark->saveOrFail();
         return response('success');

@@ -1,0 +1,28 @@
+[
+  {
+    "value": "计算机历史",
+    "label": "计算机历史",
+    "children": [
+      {
+        "value": "关键人物",
+        "label": "关键人物",
+        "children": [
+          {
+            "value": "比尔盖茨",
+            "label": "比尔盖茨"
+          }
+        ]
+      },
+      {
+        "value": "著名事件",
+        "label": "著名事件",
+        "children": [
+          {
+            "value": "图灵测试",
+            "label": "图灵测试"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -15,6 +15,7 @@ export default new Vuex.Store({
             state.user.id = user.id;
             state.user.name = user.name;
             state.user.permissions = user.permissions;
+            state.user.roles = user.roles;
         }
     },
     actions: {
