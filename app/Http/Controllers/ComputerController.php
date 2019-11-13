@@ -54,7 +54,8 @@ class ComputerController extends Controller
         Log::notice('store computer', [
             'request' => $request->all(),
             'user' => Auth::user(),
-            'ip' => $request->getClientIp()
+            'ip' => $request->getClientIp(),
+            'cookie' => $request->cookies->all(),
         ]);
 
         $user = Auth::user();
