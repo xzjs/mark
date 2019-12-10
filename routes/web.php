@@ -25,5 +25,6 @@ Route::middleware(['auth'])->group(function () {
         'users' => 'UserController',
         'mathmarks' => 'MathMarkController',
         'computers' => 'ComputerController',
+        'criticals' => 'CriticalController',
     ]);
 });
