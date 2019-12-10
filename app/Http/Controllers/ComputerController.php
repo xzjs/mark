@@ -200,6 +200,9 @@ class ComputerController extends Controller
         }
 
         $computer = Computer::find($id);
+        if ($computer->user_id != $user->id && !$user->hasRole('管理员')) {
+            return response('没有权限', 403);
+        }
         $computer->url = $request->url;
         $computer->images = json_encode($request->images);
         $computer->point = json_encode($request->point);
@@ -238,6 +241,15 @@ class ComputerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Auth::user();
+        if (!$user->can('mark.cr')) {
+            return response('没有权限', 403);
+        }
+        $critical = Computer::find($id);
+        if ($critical->user_id != $user->id && !$user->hasRole('管理员')) {
+            return response('非管理员只能删除自己的', 403);
+        }
+        Computer::destroy($id);
+        return response('success');
     }
 }

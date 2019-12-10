@@ -426,9 +426,9 @@
                 this.computer.images = fileList;
             },
             del(index, row) {
-                axios.delete('/mathmarks/' + row.id)
+                axios.delete('/computers/' + row.id)
                     .then(response => {
-                        this.getMaths();
+                        this.getComputers();
                     })
                     .catch(error => {
                         this.$message.error('没有权限');
