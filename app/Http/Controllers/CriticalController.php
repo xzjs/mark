@@ -70,7 +70,7 @@ class CriticalController extends Controller
 
         $critical = new Critical();
         $critical->text = $request->text ?? '';
-        $critical->images = json_encode($request->images);
+        $critical->images = is_null($request->images) ? '[]' : json_encode($request->images);
         $critical->analysis = $request->analysis;
         $critical->user_id = Auth::user()->id;
         $critical->cost = (time() - $request->start / 1000);
@@ -135,7 +135,7 @@ class CriticalController extends Controller
             return response('没有权限', 403);
         }
         $critical->text = $request->text ?? '';
-        $critical->images = json_encode($request->images);
+        $critical->images = is_null($request->images) ? '[]' : json_encode($request->images);
         $critical->analysis = $request->analysis;
         $critical->cost = (time() - $request->start / 1000);
         $critical->saveOrFail();
