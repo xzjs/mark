@@ -17,8 +17,8 @@ class CreateCriticalsTable extends Migration
             $table->bigIncrements('id');
             $table->string('text')->comment('文字');
             $table->text('images')->comment('图片');
-            $table->string('analysis')->comment('分析');
-            $table->string('user_id')->comment('用户id');
+            $table->text('analysis')->comment('分析');
+            $table->integer('user_id')->comment('用户id');
             $table->integer('cost')->comment('花费时间');
             $table->softDeletes();
             $table->timestamps();
