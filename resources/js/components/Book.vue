@@ -147,7 +147,10 @@
             },
             refresh() {
                 this.getBooks();
-                this.book = {};
+                this.book = {
+                    topic: '',
+                    legends: [],
+                };
                 this.$refs.form.resetFields();
                 this.$refs.legend.clearFiles();
                 this.book.legends = [];

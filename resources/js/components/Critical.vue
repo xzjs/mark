@@ -163,6 +163,7 @@
             refresh() {
                 this.getCriticals();
                 this.critical = {};
+                this.critical.images = [];
                 this.$refs.form.resetFields();
                 this.dialogVisible = false;
             },

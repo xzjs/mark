@@ -318,6 +318,7 @@
             refresh() {
                 this.getMaths();
                 this.math = {};
+                this.math.answers = [];
                 this.$refs.form.resetFields();
                 this.dialogVisible = false;
                 this.book = {};

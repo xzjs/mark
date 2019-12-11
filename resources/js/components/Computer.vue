@@ -416,6 +416,7 @@
             refresh() {
                 this.getComputers();
                 this.computer = {};
+                this.computer.images = [];
                 this.$refs.form.resetFields();
                 this.dialogVisible = false;
             },
