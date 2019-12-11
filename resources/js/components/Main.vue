@@ -13,6 +13,7 @@
                 <el-menu-item v-if="user.permissions.indexOf('mark.cs')!==-1" index="/computer">计算机/AI</el-menu-item>
                 <el-menu-item v-if="user.permissions.indexOf('mark.cr')!==-1" index="/critical">批判性思维</el-menu-item>
                 <el-menu-item index="user" v-if="user.permissions.indexOf('user')!==-1">用户管理</el-menu-item>
+                <el-menu-item class="username" @click="logout">登出</el-menu-item>
                 <el-menu-item class="username" index="password">修改密码</el-menu-item>
             </el-menu>
         </el-header>
@@ -41,7 +42,17 @@
                 this.activeIndex = path;
             }
         },
-        methods: {}
+        methods: {
+            logout() {
+                axios.delete('/tokens/0')
+                    .then(response => {
+                        window.location.href = '/';
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data);
+                    })
+            }
+        }
     }
 </script>
 

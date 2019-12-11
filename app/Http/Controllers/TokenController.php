@@ -107,6 +107,7 @@ class TokenController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Auth::logout();
+        return response('success');
     }
 }

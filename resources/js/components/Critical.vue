@@ -198,13 +198,13 @@
                 return list;
             },
             currentChange(page) {
-                this.getMaths({'page': page});
+                this.getCriticals({'page': page});
             },
             preCLick(page) {
-                this.getMaths({'page': page - 1});
+                this.getCriticals({'page': page - 1});
             },
             nextClick(page) {
-                this.getMaths({'page': page + 1});
+                this.getCriticals({'page': page + 1});
             }
         },
         mounted() {

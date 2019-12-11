@@ -182,7 +182,7 @@
             },
             preCLick(page) {
                 if (page > 1) {
-                    this.getBools({'page': page - 1});
+                    this.getBooks({'page': page - 1});
                 }
             },
             nextClick(page) {

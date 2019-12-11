@@ -450,13 +450,13 @@
                 return list;
             },
             currentChange(page) {
-                this.getMaths({'page': page});
+                this.getComputers({'page': page});
             },
             preCLick(page) {
-                this.getMaths({'page': page - 1});
+                this.getComputers({'page': page - 1});
             },
             nextClick(page) {
-                this.getMaths({'page': page + 1});
+                this.getComputers({'page': page + 1});
             }
         },
         mounted() {
