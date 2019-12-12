@@ -14,11 +14,15 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         if ($user->can('user')) {
-            $users = User::all();
+            if($request->type){
+                $users = User::permission($request->type)->get();
+            }else{
+                $users = User::all();
+            }
             $data = [];
             foreach ($users as $user) {
                 $data[] = [

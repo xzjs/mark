@@ -1,6 +1,14 @@
 <template>
     <div>
         <el-button type="primary" icon="el-icon-edit" @click="showDialog">添加</el-button>
+        <el-select v-if="user.roles.indexOf('管理员') != -1" placeholder="请选择要查看的用户" v-model="selectUser" @change="filter">
+            <el-option
+                    v-for="item in allUsers"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+            </el-option>
+        </el-select>
         <el-table
                 border
                 :data="maths"
@@ -247,7 +255,9 @@
                     reasoning: [{required: true, message: '请选择', trigger: 'blur'}],
                     knowledge: [{required: true, message: '请选择', trigger: 'blur'}],
                     point: [{required: true, message: '请选择', trigger: 'blur'}],
-                }
+                },
+                allUsers: [],
+                selectUser: null,
             }
         },
         computed: {
@@ -371,12 +381,28 @@
             },
             nextClick(page) {
                 this.getMaths({'page': page + 1});
+            },
+            getAllUsers() {
+                axios.get('/users', {params: {type: 'mark.math',}})
+                    .then(response => {
+                        this.allUsers = response.data;
+                    })
+                    .catch(error => {
+                        this.$message.error(error.response.data);
+                    })
+            },
+            filter(id) {
+                this.getMaths({user_id: id});
             }
         },
         mounted() {
             this.getMaths();
 
             this.getIds();
+
+            if (this.user.roles.indexOf('管理员') != -1) {
+                this.getAllUsers();
+            }
 
             axios.get('/json/scene.json')
                 .then(response => {

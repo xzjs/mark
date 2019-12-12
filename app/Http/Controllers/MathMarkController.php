@@ -14,11 +14,15 @@ class MathMarkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         if ($user->hasRole('管理员')) {//是管理员
-            $mathMarks = MathMark::with('user:id,name')->paginate(10)->toArray();
+            if ($request->user_id) {
+                $mathMarks = MathMark::with('user:id,name')->where('user_id', $request->user_id)->paginate(10)->toArray();
+            } else {
+                $mathMarks = MathMark::with('user:id,name')->paginate(10)->toArray();
+            }
         } else {
             $mathMarks = MathMark::with('user:id,name')->whereIn('user_id', [1, $user->id])->paginate(10)->toArray();
         }
