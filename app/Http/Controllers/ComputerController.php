@@ -203,7 +203,7 @@ class ComputerController extends Controller
         if ($computer->user_id != $user->id && !$user->hasRole('管理员')) {
             return response('没有权限', 403);
         }
-        $computer->url = $request->url;
+        $computer->url = $request->url ?? '';
         $computer->images = json_encode($request->images);
         $computer->point = json_encode($request->point);
         $computer->target = $request->target;
