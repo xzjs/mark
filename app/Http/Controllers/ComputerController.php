@@ -95,7 +95,7 @@ class ComputerController extends Controller
         }
 
         $computer = new Computer();
-        $computer->url = $request->url;
+        $computer->url = $request->url ?? '';
         $computer->images = json_encode($request->images);
         $computer->point = json_encode($request->point);
         $computer->target = $request->target;
